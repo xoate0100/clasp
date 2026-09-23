@@ -70,13 +70,13 @@ export class Functions {
    * @throws {Error} If there's an API error, authentication/configuration issues,
    * or if the function execution itself returns an error.
    */
-  async runFunction(functionName: string, parameters: unknown[], devMode = true) {
+  async runFunction(functionName: string, parameters: unknown[], devMode = true, deploymentId?: string) {
     debug('Running script function %s', functionName);
     assertAuthenticated(this.options);
     assertScriptConfigured(this.options);
 
     const credentials = this.options.credentials;
-    const scriptId = this.options.project.scriptId;
+    const scriptId = devMode ? this.options.project.scriptId : await this.nonDevScriptId(deploymentId);
     const script = google.script({version: 'v1', auth: credentials});
 
     try {
@@ -98,4 +98,71 @@ export class Functions {
       handleApiError(error);
     }
   }
+
+  /**
+   * scripts.run rejects the project script ID when devMode is false.
+   * The path must be an API-executable deployment ID.
+   */
+  private async nonDevScriptId(deploymentId?: string): Promise<string> {
+    if (deploymentId) {
+      return deploymentId;
+    }
+    const ids = await this.executionApiDeploymentIds();
+    const only = ids[0];
+    if (ids.length === 1 && only) {
+      return only;
+    }
+    const detail = ids.length
+      ? `Multiple API-executable deployments: ${ids.join(', ')}.`
+      : 'No API-executable deployment was found.';
+    throw new Error(`${detail} Pass --deploymentId with an EXECUTION_API deployment.`, {
+      cause: {code: 'DEPLOYMENT_ID_REQUIRED', deploymentIds: ids},
+    });
+  }
+
+  private async executionApiDeploymentIds(): Promise<string[]> {
+    const project = this.options.project;
+    const projectId = project?.scriptId;
+    if (!project || !projectId) {
+      throw new Error('Script ID is required to resolve an API-executable deployment.');
+    }
+    const script = google.script({version: 'v1', auth: this.options.credentials});
+    const listed = await script.projects.deployments.list({scriptId: projectId});
+    const ids: string[] = [];
+    for (const deployment of listed.data.deployments ?? []) {
+      const id = await this.executionApiId(script, projectId, deployment);
+      if (id) {
+        ids.push(id);
+      }
+    }
+    return ids;
+  }
+
+  private async executionApiId(
+    script: ReturnType<typeof google.script>,
+    projectId: string,
+    deployment: DeploymentWithEntryPoints,
+  ): Promise<string | undefined> {
+    const deploymentId = deployment.deploymentId ?? undefined;
+    if (!deploymentId) {
+      return undefined;
+    }
+    const entryPoints = deployment.entryPoints ?? (await this.fetchEntryPoints(script, projectId, deploymentId));
+    const executable = entryPoints.some(entry => entry.entryPointType === 'EXECUTION_API');
+    return executable ? deploymentId : undefined;
+  }
+
+  private async fetchEntryPoints(
+    script: ReturnType<typeof google.script>,
+    projectId: string,
+    deploymentId: string,
+  ): Promise<NonNullable<DeploymentWithEntryPoints['entryPoints']>> {
+    const res = await script.projects.deployments.get({scriptId: projectId, deploymentId});
+    return res.data.entryPoints ?? [];
+  }
 }
+
+type DeploymentWithEntryPoints = {
+  deploymentId?: string | null;
+  entryPoints?: Array<{entryPointType?: string | null}> | null;
+};

@@ -164,6 +164,62 @@ describe('Function operations', function () {
       const res = await clasp.functions.runFunction('myFunction', [{a: 'test'}]);
       expect(res.response?.result).to.equal('Hello');
     });
+
+    it('should run a non-dev function against an explicit deployment id', async function () {
+      nock('https://script.googleapis.com')
+        .post('/v1/scripts/exec-deployment-id:run', body => {
+          expect(body.function).to.equal('myFunction');
+          expect(body.devMode).to.be.false;
+          return true;
+        })
+        .reply(200, {
+          done: true,
+          response: {result: 'pong'},
+        });
+      const clasp = await initClaspInstance({
+        credentials: mockCredentials(),
+      });
+      const res = await clasp.functions.runFunction('myFunction', [], false, 'exec-deployment-id');
+      expect(res.response?.result).to.equal('pong');
+    });
+
+    it('should select the only API-executable deployment for non-dev runs', async function () {
+      nock('https://script.googleapis.com')
+        .get('/v1/projects/mock-script-id/deployments')
+        .query(true)
+        .reply(200, {
+          deployments: [{deploymentId: 'exec-deployment-id'}],
+        });
+      nock('https://script.googleapis.com')
+        .get('/v1/projects/mock-script-id/deployments/exec-deployment-id')
+        .reply(200, {
+          entryPoints: [{entryPointType: 'EXECUTION_API'}],
+        });
+      nock('https://script.googleapis.com')
+        .post('/v1/scripts/exec-deployment-id:run', body => {
+          expect(body.devMode).to.be.false;
+          return true;
+        })
+        .reply(200, {done: true, response: {result: 'pong'}});
+      const clasp = await initClaspInstance({
+        credentials: mockCredentials(),
+      });
+      const res = await clasp.functions.runFunction('myFunction', [], false);
+      expect(res.response?.result).to.equal('pong');
+    });
+
+    it('should refuse a non-dev run when no API-executable deployment exists', async function () {
+      nock('https://script.googleapis.com')
+        .get('/v1/projects/mock-script-id/deployments')
+        .query(true)
+        .reply(200, {deployments: []});
+      const clasp = await initClaspInstance({
+        credentials: mockCredentials(),
+      });
+      await expect(clasp.functions.runFunction('myFunction', [], false)).to.be.rejectedWith(
+        /Pass --deploymentId/,
+      );
+    });
   });
 
   describe('with invalid project, authenticated', function () {

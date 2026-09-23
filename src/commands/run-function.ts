@@ -25,6 +25,7 @@ import {GlobalOptions, isInteractive, withSpinner} from './utils.js';
 interface CommandOptions extends GlobalOptions {
   readonly nondev: boolean;
   readonly params: string;
+  readonly deploymentId?: string;
 }
 
 export const command = new Command('run-function')
@@ -32,6 +33,7 @@ export const command = new Command('run-function')
   .description('Run a function in your Apps Scripts project')
   .argument('[functionName]', 'The name of the function to run')
   .option('--nondev', 'Run script function in non-devMode')
+  .option('--deploymentId <id>', 'API-executable deployment ID. Used by --nondev.')
   .option('-p, --params <value>', 'Parameters to pass to the function, as a JSON-encoded array')
   .action(async function (this: Command, functionName: string): Promise<void> {
     const options: CommandOptions = this.optsWithGlobals();
@@ -67,7 +69,7 @@ export const command = new Command('run-function')
     try {
       // `clasp.functions.runFunction` calls the Apps Script API.
       const result = await withSpinner(`Running function: ${functionName}`, async () => {
-        return clasp.functions.runFunction(functionName, params, devMode);
+        return clasp.functions.runFunction(functionName, params, devMode, options.deploymentId);
       });
 
       if (options.json) {
@@ -116,10 +118,13 @@ export const command = new Command('run-function')
         });
         this.error(msg);
       }
+      if (error.cause?.code === 'DEPLOYMENT_ID_REQUIRED') {
+        this.error(error.message);
+      }
       if (error.cause?.code === 'NOT_FOUND') {
-        // Specific error if the function or script (as API executable) is not found.
         const msg = intl.formatMessage({
-          defaultMessage: 'Script function not found. Please make sure script is deployed as API executable.',
+          defaultMessage:
+            'Apps Script API rejected that script resource. For a versioned run, pass the API-executable deployment ID with --deploymentId.',
         });
         this.error(msg);
       }

@@ -450,6 +450,25 @@ describe('File operations', function () {
       expect(pushedFiles).to.have.length(5);
     });
 
+    it('should fail when a filePushOrder path does not exist', async function () {
+      mockfs({
+        'appsscript.json': mockfs.load(path.resolve(__dirname, '../fixtures/appsscript-no-services.json')),
+        'config.js': 'function config() {}',
+        '.clasp.json': JSON.stringify({
+          scriptId: 'mock-script-id',
+          filePushOrder: ['config.js', 'missing.js'],
+        }),
+        'package.json': '{}',
+        [path.resolve(os.homedir(), '.clasprc.json')]: mockfs.load(
+          path.resolve(__dirname, '../fixtures/dot-clasprc-authenticated.json'),
+        ),
+      });
+      const clasp = await initClaspInstance({
+        credentials: mockCredentials(),
+      });
+      await expect(clasp.files.push()).to.be.rejectedWith(/filePushOrder path not found: missing.js/);
+    });
+
     afterEach(function () {
       mockfs.restore();
     });

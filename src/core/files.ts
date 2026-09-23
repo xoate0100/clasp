@@ -570,6 +570,12 @@ export class Files {
     const scriptId = this.options.project.scriptId;
 
     const {files, skipped} = await this.collectLocalFiles();
+    const missing = this.checkMissingFilesFromPushOrder(files);
+    if (missing.length > 0) {
+      throw new Error(`filePushOrder path not found: ${missing.join(', ')}`, {
+        cause: {code: 'MISSING_PUSH_ORDER_FILE', files: missing},
+      });
+    }
     if (!files || files.length === 0) {
       debug('No files found to push.');
       return {files: [], skipped};
@@ -636,18 +642,18 @@ export class Files {
   /**
    * Checks if any files specified in the `filePushOrder` of the manifest
    * were not actually pushed. This can help identify misconfigurations.
-   * @param {ProjectFile[]} pushedFiles - An array of files that were successfully pushed.
-   * @returns {void} This method does not return a value but may have side effects (e.g. logging) if implemented.
-   * Currently, it only calculates missing files but doesn't do anything with the result.
+   * @param {ProjectFile[]} pushedFiles - Files collected for this push.
+   * @returns {string[]} `filePushOrder` paths that do not match a collected file.
    */
-  checkMissingFilesFromPushOrder(pushedFiles: ProjectFile[]) {
-    const missingFiles = [];
-    for (const p of this.options.files.filePushOrder ?? []) {
-      const wasPushed = pushedFiles.find(f => path.normalize(f.localPath) === path.normalize(p));
+  checkMissingFilesFromPushOrder(pushedFiles: ProjectFile[]): string[] {
+    const missingFiles: string[] = [];
+    for (const entry of this.options.files.filePushOrder ?? []) {
+      const wasPushed = pushedFiles.some(file => path.normalize(file.localPath) === path.normalize(entry));
       if (!wasPushed) {
-        missingFiles.push(p);
+        missingFiles.push(entry);
       }
     }
+    return missingFiles;
   }
 
   /**
