@@ -16,3 +16,4 @@ tmp
 .clasprc.json
 __pycache__/
 *.pyc
+6_ai_runtime_context/issue_cache/
