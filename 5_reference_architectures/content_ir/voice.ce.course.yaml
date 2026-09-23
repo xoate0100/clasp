@@ -1,0 +1,12 @@
+# Voice spec — ce.course (DEC-FAC-0020 / Wave 1.11)
+profile: ce.course
+voice_id: surewealth-ce-instructor
+tone: professional, compliance-aware, calm
+pace: measured
+reading_level_target: grade_10
+forbidden:
+  - speculative legal advice
+  - colloquial slang
+preferred:
+  - cite jurisdiction when stating a rule
+  - define insurance terms on first use

@@ -1,0 +1,266 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/profile.blog.article.schema.json",
+  "title": "ContentIR profile — blog.article (SW-BLOG-002)",
+  "description": "Business-neutral blog article IR. Business voice, pillars, compliance, and taxonomy live in blog.override — not here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ir_version",
+    "profile",
+    "topic",
+    "funnel",
+    "pillar_ref",
+    "author_ref",
+    "published_intent_at",
+    "sources",
+    "sections",
+    "takeaways",
+    "pull_quotes",
+    "diagram",
+    "faq",
+    "glossary_terms",
+    "ctas",
+    "interactive",
+    "image_slots",
+    "claims"
+  ],
+  "properties": {
+    "ir_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "profile": {
+      "const": "blog.article"
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1
+    },
+    "funnel": {
+      "type": "string",
+      "enum": ["tofu", "mofu", "bofu"]
+    },
+    "pillar_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Id referencing override.pillars[].id"
+    },
+    "author_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Author identity ref for EEAT (SW-BLOG-007)"
+    },
+    "published_intent_at": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ISO-8601 intent date for the article"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url", "publisher", "primary", "accessed_at"],
+        "properties": {
+          "url": { "type": "string", "minLength": 1 },
+          "publisher": { "type": "string", "minLength": 1 },
+          "primary": { "type": "boolean" },
+          "accessed_at": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "description": "H2/H3 tree with sentence-addressable body blocks",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "heading", "level", "blocks"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "heading": { "type": "string", "minLength": 1 },
+          "level": { "type": "integer", "enum": [2, 3] },
+          "blocks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["paragraph", "list", "visual", "interactive_ref", "table"]
+                },
+                "id": { "type": "string" },
+                "sentences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["id", "text"],
+                    "properties": {
+                      "id": { "type": "string", "minLength": 1 },
+                      "text": { "type": "string", "minLength": 1 }
+                    }
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["text"],
+                    "properties": {
+                      "text": { "type": "string", "minLength": 1 },
+                      "bold_lead_in": { "type": "boolean" }
+                    }
+                  }
+                },
+                "component_id": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "takeaways": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "pull_quotes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sentence_id"],
+        "properties": {
+          "sentence_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Verbatim reference to a body sentence id — not free text"
+          }
+        }
+      }
+    },
+    "diagram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["svg", "title", "desc", "caption"],
+      "properties": {
+        "svg": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "desc": { "type": "string", "minLength": 1 },
+        "caption": { "type": "string", "minLength": 1 }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question", "answer"],
+        "properties": {
+          "question": { "type": "string", "minLength": 1 },
+          "answer": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "case_card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label_composite", "background", "approach", "outcome"],
+      "properties": {
+        "label_composite": { "const": true },
+        "background": { "type": "string", "minLength": 1 },
+        "approach": { "type": "string", "minLength": 1 },
+        "outcome": { "type": "string", "minLength": 1 }
+      }
+    },
+    "glossary_terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "definition"],
+        "properties": {
+          "term": { "type": "string", "minLength": 1 },
+          "definition": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "ctas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "href": { "type": "string" }
+        }
+      }
+    },
+    "interactive": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Component id from override.components.available"
+      }
+    },
+    "image_slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot_id", "placement", "alt"],
+        "properties": {
+          "slot_id": { "type": "string", "minLength": 1 },
+          "placement": { "type": "string", "minLength": 1 },
+          "envato_item_url": { "type": "string" },
+          "preview_url": { "type": "string" },
+          "alt": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "description": "First-class claims for human one-by-one approval (SW-BLOG-005) and compliance rulesets",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "text", "type"],
+        "properties": {
+          "claim_id": { "type": "string", "minLength": 1 },
+          "text": { "type": "string", "minLength": 1 },
+          "type": {
+            "type": "string",
+            "enum": [
+              "guarantee",
+              "performance",
+              "tax",
+              "legal",
+              "statistic",
+              "product",
+              "other"
+            ]
+          },
+          "source_ref": {
+            "type": "string",
+            "description": "Index or url key into sources[]"
+          },
+          "attribution": { "type": "string" }
+        }
+      }
+    }
+  }
+}

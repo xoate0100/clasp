@@ -1,0 +1,72 @@
+# Meta-registry: catalog of all machine-readable coordination state in the workspace.
+version: 1
+updated: "2026-07-05"
+
+layer_yield_order:
+  - canonical
+  - config_and_catalog
+  - working
+  - incoming
+
+layers:
+  canonical:
+    description: "Accepted decisions and reference architectures — append-only with status fields"
+    paths:
+      - 5_reference_architectures/DECISION_REGISTRY.yaml
+      - 5_reference_architectures/LAYER_RULES.yaml
+      - 5_reference_architectures/DRIFT_VECTORS.yaml
+      - 5_reference_architectures/AGENT_REGISTRY.yaml
+      - 5_reference_architectures/WORKSPACE_SPINE_REGISTRY.yaml
+  config_and_catalog:
+    description: "Bootstrap config, MVP spec, feature flags"
+    paths:
+      - 0_phase0_bootstrap/MVP_SPECIFICATION.yaml
+      - 0_phase0_bootstrap/feature_flags.yml
+  working:
+    description: "Active plan, task pointer, generated AI context"
+    paths:
+      - 6_ai_runtime_context/ACTIVE_PLAN.yaml
+      - 6_ai_runtime_context/ACTIVE_TASK_POINTER.yaml
+      - 6_ai_runtime_context/AI_CONTEXT.md
+  incoming:
+    description: "Session artifacts awaiting merge or review"
+    paths:
+      - 6_ai_runtime_context/AGENTIC_RUN_LOG.yaml
+      - proposals/
+
+registries:
+  - id: decision_registry
+    path: 5_reference_architectures/DECISION_REGISTRY.yaml
+    schema: 7_schemas/decision_registry.schema.json
+    validator: 3_bootstrap_scripts/decision_registry_validate.py
+    min_shape: {version: int, decisions: list}
+
+  - id: agent_registry
+    path: 5_reference_architectures/AGENT_REGISTRY.yaml
+    schema: 7_schemas/agent_registry.schema.json
+    validator: 3_bootstrap_scripts/agent_registry_validate.py
+    min_shape: {version: int, agents: list, graph: object}
+
+  - id: drift_vectors
+    path: 5_reference_architectures/DRIFT_VECTORS.yaml
+    schema: 7_schemas/drift_vectors.schema.json
+    validator: 3_bootstrap_scripts/drift_vectors_validate.py
+    min_shape: {version: int, vectors: list}
+
+  - id: workspace_spine
+    path: 5_reference_architectures/WORKSPACE_SPINE_REGISTRY.yaml
+    schema: 7_schemas/workspace_spine.schema.json
+    validator: 3_bootstrap_scripts/workspace_spine_validate.py
+    min_shape: {version: int, registries: list}
+
+  - id: knowledge_sources
+    path: 5_reference_architectures/KNOWLEDGE_SOURCES.yaml
+    schema: 7_schemas/knowledge_sources.schema.json
+    validator: 3_bootstrap_scripts/knowledge_sources_validate.py
+    indexer: 3_bootstrap_scripts/knowledge_index_build.py
+    min_shape: {version: int, sources: list}
+
+  - id: agentic_run_log
+    path: 6_ai_runtime_context/AGENTIC_RUN_LOG.yaml
+    append_only: true
+    writer: agentic/run_log.py

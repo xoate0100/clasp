@@ -1,0 +1,15 @@
+{
+  "name": "@project-initializer/node-adapter",
+  "version": "4.2.0-dev",
+  "private": true,
+  "type": "module",
+  "description": "Node/TS reference adapter — full lifecycle without Python",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test scripts/test/*.test.mjs",
+    "lint": "node scripts/lint.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

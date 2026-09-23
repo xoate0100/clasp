@@ -1,0 +1,373 @@
+{
+  "schema": "capability-descriptor-mapped/v1",
+  "source": "5_reference_architectures/CAPABILITY_REGISTRY.yaml",
+  "category": "operational",
+  "mapped_at": "2026-08-27",
+  "capabilities": [
+    {
+      "id": "CAP.repo.scan",
+      "version": "1.0.0",
+      "name": "Repository Scanner",
+      "description": "Build typed RepositoryProfile from filesystem and git state",
+      "category": "operational",
+      "maturity": "production",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Produce a typed RepositoryProfile from repo root filesystem + git state",
+        "outputs": { "repository_profile": { "type": "object" } }
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.repo.scan.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "scan-has-profile-fields",
+            "input": { "repo_fixture": "minimal_git_repo" },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.repository_profile", "op": "exists" }]
+            }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "agent_platform/layer0/repository_scanner.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Operational observation capability: scan a repo into a typed profile.",
+        "may_override": [
+          { "path": "reference_implementation.path", "reason": "Alternate scanners OK if profile shape holds" }
+        ],
+        "must_pass": [
+          { "requirement": "Emits RepositoryProfile", "conformance_case_ids": ["scan-has-profile-fields"] }
+        ]
+      },
+      "dependencies": [],
+      "evaluators": ["EV.schema.capability_registry"],
+      "provenance": {
+        "original_category": "observation",
+        "original_idempotency": true,
+        "implementation_ref": "agent_platform/layer0/repository_scanner.py"
+      }
+    },
+    {
+      "id": "CAP.evidence.collect",
+      "version": "1.0.0",
+      "name": "Evidence Collector",
+      "description": "Collect attributable evidence bundle from repository paths",
+      "category": "operational",
+      "maturity": "production",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Collect attributable evidence bundle from repository paths"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.evidence.collect.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "evidence-bundle-present",
+            "input": { "paths": ["README.md"] },
+            "expect": { "outcome": "pass", "asserts": [{ "path": "$.bundle", "op": "exists" }] }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "agent_platform/layer1/evidence_collector.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Collect attributable evidence from paths after a repo scan.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Collector impl may vary by stack" }
+        ],
+        "must_pass": [
+          { "requirement": "Returns evidence bundle", "conformance_case_ids": ["evidence-bundle-present"] }
+        ]
+      },
+      "dependencies": ["CAP.repo.scan"],
+      "evaluators": [],
+      "provenance": {
+        "original_category": "observation",
+        "implementation_ref": "agent_platform/layer1/evidence_collector.py"
+      }
+    },
+    {
+      "id": "CAP.model.build",
+      "version": "1.0.0",
+      "name": "System Model Builder",
+      "description": "Build SystemModel and detect structural disconnects",
+      "category": "operational",
+      "maturity": "production",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Build SystemModel and detect structural disconnects from evidence"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.model.build.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "model-built",
+            "input": { "evidence_fixture": "sample_bundle" },
+            "expect": { "outcome": "pass", "asserts": [{ "path": "$.system_model", "op": "exists" }] }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "agent_platform/layer2/system_model_builder.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Interpret evidence into a system model.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Model builder may specialize" }
+        ],
+        "must_pass": [
+          { "requirement": "Emits system_model", "conformance_case_ids": ["model-built"] }
+        ]
+      },
+      "dependencies": ["CAP.evidence.collect"],
+      "evaluators": [],
+      "provenance": {
+        "original_category": "interpretation",
+        "implementation_ref": "agent_platform/layer2/system_model_builder.py"
+      }
+    },
+    {
+      "id": "CAP.plan.compile",
+      "version": "1.0.0",
+      "name": "Capability Compiler",
+      "description": "Compile goal into typed capability execution plan",
+      "category": "operational",
+      "maturity": "production",
+      "risk_level": "medium",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Compile a goal into a typed capability execution plan"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.plan.compile.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "plan-has-steps",
+            "input": { "goal": "validate platform" },
+            "expect": { "outcome": "pass", "asserts": [{ "path": "$.plan.steps", "op": "exists" }] }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "agent_platform/layer3/capability_compiler.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Compile goals into capability plans.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Compiler strategy may vary" }
+        ],
+        "must_pass": [
+          { "requirement": "Plan contains steps", "conformance_case_ids": ["plan-has-steps"] }
+        ]
+      },
+      "dependencies": ["CAP.model.build"],
+      "evaluators": ["EV.schema.capability_registry"],
+      "provenance": {
+        "original_category": "planning",
+        "implementation_ref": "agent_platform/layer3/capability_compiler.py"
+      }
+    },
+    {
+      "id": "CAP.validate.full",
+      "version": "1.0.0",
+      "name": "Full Platform Validation",
+      "description": "Run evaluator registry and capability schema checks",
+      "category": "operational",
+      "maturity": "production",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Run evaluator registry and capability schema checks"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.validate.full.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "validate-exit-report",
+            "input": { "mode": "full" },
+            "expect": { "outcome": "pass", "asserts": [{ "path": "$.report", "op": "exists" }] }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "3_bootstrap_scripts/platform_cli.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Full platform validation via evaluator registry.",
+        "may_override": [
+          { "path": "evaluators", "reason": "Extra evaluators may be added; core suite must still run" }
+        ],
+        "must_pass": [
+          { "requirement": "Produces validation report", "conformance_case_ids": ["validate-exit-report"] }
+        ]
+      },
+      "dependencies": [],
+      "evaluators": [
+        "EV.agentic.coordination",
+        "EV.schema.capability_registry",
+        "EV.governance.drift"
+      ],
+      "provenance": {
+        "original_category": "evaluation",
+        "implementation_ref": "3_bootstrap_scripts/platform_cli.py"
+      }
+    },
+    {
+      "id": "CAP.migration.plan",
+      "version": "1.0.0",
+      "name": "Migration Planner",
+      "description": "Dry-run template upgrade and ownership-aware migration plan",
+      "category": "operational",
+      "maturity": "preview",
+      "risk_level": "high",
+      "approval_policy": "human_required",
+      "contract": {
+        "spec": "Dry-run template upgrade producing an ownership-aware migration plan"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.migration.plan.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "migration-plan-dry-run",
+            "input": { "dry_run": true },
+            "expect": { "outcome": "pass", "asserts": [{ "path": "$.plan", "op": "exists" }] }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "3_bootstrap_scripts/template_update.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Plan template migrations without applying them.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Planner may specialize per adapter" }
+        ],
+        "must_pass": [
+          { "requirement": "Dry-run emits plan", "conformance_case_ids": ["migration-plan-dry-run"] }
+        ],
+        "must_not_change": ["approval_policy"]
+      },
+      "dependencies": [],
+      "evaluators": ["EV.reference.paths"],
+      "provenance": {
+        "original_category": "migration",
+        "original_approval_policy": "human_required",
+        "implementation_ref": "3_bootstrap_scripts/template_update.py"
+      }
+    },
+    {
+      "id": "CAP.migration.apply",
+      "version": "1.0.0",
+      "name": "Migration Apply",
+      "description": "Apply approved template migration with rollback support",
+      "category": "operational",
+      "maturity": "preview",
+      "risk_level": "critical",
+      "approval_policy": "human_required",
+      "contract": {
+        "spec": "Apply approved template migration with rollback support"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.migration.apply.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "apply-requires-approval",
+            "input": { "approved": false },
+            "expect": { "outcome": "reject", "error_code": "APPROVAL_REQUIRED" }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "3_bootstrap_scripts/template_update.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Apply migrations only after human approval.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Apply mechanics may vary" }
+        ],
+        "must_pass": [
+          { "requirement": "Unapproved apply is rejected", "conformance_case_ids": ["apply-requires-approval"] }
+        ],
+        "must_not_change": ["approval_policy", "risk_level"]
+      },
+      "dependencies": ["CAP.migration.plan"],
+      "evaluators": [],
+      "provenance": {
+        "original_category": "migration",
+        "original_approval_policy": "human_required",
+        "implementation_ref": "3_bootstrap_scripts/template_update.py"
+      }
+    },
+    {
+      "id": "CAP.release.prepare",
+      "version": "1.0.0",
+      "name": "Release Preparation",
+      "description": "Validate release readiness and emit manifests",
+      "category": "operational",
+      "maturity": "preview",
+      "risk_level": "high",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Validate release readiness and emit manifests"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP.release.prepare.suite",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "release-manifest",
+            "input": { "channel": "stable" },
+            "expect": { "outcome": "pass", "asserts": [{ "path": "$.manifest", "op": "exists" }] }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "3_bootstrap_scripts/platform_cli.py",
+        "repository": "xoate0100/project_initializer"
+      },
+      "agent_manifest": {
+        "summary": "Prepare release manifests after validation.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Release tooling may vary" }
+        ],
+        "must_pass": [
+          { "requirement": "Emits release manifest", "conformance_case_ids": ["release-manifest"] }
+        ]
+      },
+      "dependencies": [],
+      "evaluators": ["EV.agentic.coordination"],
+      "provenance": {
+        "original_category": "release",
+        "implementation_ref": "3_bootstrap_scripts/platform_cli.py"
+      }
+    }
+  ]
+}

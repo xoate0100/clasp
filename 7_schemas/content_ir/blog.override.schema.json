@@ -1,0 +1,235 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/blog.override.schema.json",
+  "title": "Blog spoke override (SW-BLOG-002)",
+  "description": "Business-supplied data that specializes the neutral blog.article profile. No hub defaults for voice, pillars, or compliance copy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "override_version",
+    "voice_ref",
+    "pillars",
+    "keywords",
+    "length_by_funnel",
+    "taxonomy",
+    "ctas",
+    "components",
+    "disclosure",
+    "compliance"
+  ],
+  "properties": {
+    "override_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "voice_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path or id of the business voice spec"
+    },
+    "pillars": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "keywords": {
+      "type": "object",
+      "description": "Free-form keyword map; keys and values are business data",
+      "additionalProperties": {
+        "type": ["string", "array"],
+        "items": { "type": "string" }
+      }
+    },
+    "length_by_funnel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tofu": { "$ref": "#/definitions/length_band" },
+        "mofu": { "$ref": "#/definitions/length_band" },
+        "bofu": { "$ref": "#/definitions/length_band" }
+      }
+    },
+    "reading_level": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_grade": { "type": "number" },
+        "max_grade": { "type": "number" },
+        "metric": {
+          "type": "string",
+          "enum": ["flesch_kincaid_grade"],
+          "default": "flesch_kincaid_grade"
+        }
+      }
+    },
+    "taxonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["categories", "tags"],
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "label": { "type": "string" }
+            }
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "label": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "ctas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "href": { "type": "string" }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available"],
+      "properties": {
+        "available": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "min_ops_version": { "type": "string" },
+        "class_prefix": {
+          "type": "string",
+          "minLength": 1,
+          "description": "CSS class prefix for projected component markup (business-supplied)"
+        }
+      }
+    },
+    "disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "block_ref": {
+          "type": "string",
+          "description": "Generic slot — theme pattern or shortcode id"
+        },
+        "notice_url": {
+          "type": "string",
+          "description": "Generic slot — URL for a required notice page"
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rulesets"],
+      "properties": {
+        "rulesets": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ruleset" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "length_band": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min_words", "max_words"],
+      "properties": {
+        "min_words": { "type": "integer", "minimum": 1 },
+        "max_words": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ruleset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "rules"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/rule" }
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "message", "severity"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "claim_type": {
+          "type": "string",
+          "enum": [
+            "guarantee",
+            "performance",
+            "tax",
+            "legal",
+            "statistic",
+            "product",
+            "other"
+          ]
+        },
+        "text_regex": {
+          "type": "string",
+          "description": "Optional regex matched against claim.text"
+        },
+        "require": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "attribution",
+              "source_ref",
+              "source.primary",
+              "link_present"
+            ]
+          }
+        },
+        "forbid": {
+          "type": "boolean",
+          "description": "When true, matching claims are forbidden"
+        },
+        "attribution_in": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Allowed attribution values when require includes attribution"
+        },
+        "message": { "type": "string", "minLength": 1 },
+        "severity": {
+          "type": "string",
+          "enum": ["block", "warn"]
+        }
+      }
+    }
+  }
+}

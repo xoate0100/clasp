@@ -1,0 +1,6 @@
+version: 1.0.0
+updated: '2026-09-22'
+description: >-
+  Child-owned copy. The fleet registry lives on project_initializer.
+  This spoke does not register other children.
+children: []

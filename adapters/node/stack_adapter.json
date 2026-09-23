@@ -1,0 +1,43 @@
+{
+  "adapter_id": "node",
+  "schema_version": "1.1.0",
+  "governance_runtime": "node",
+  "product_stack": "typescript",
+  "display_name": "Node/TypeScript Reference Adapter",
+  "description": "Proves stack portability — full lifecycle with pnpm/Node/lefthook only.",
+  "toolchain": {
+    "runtimes": [
+      {
+        "name": "node",
+        "min_version": "20.0.0",
+        "version_command": "node --version"
+      }
+    ],
+    "package_manager": "pnpm",
+    "test_command": "pnpm test",
+    "lint_command": "pnpm lint",
+    "build_command": "pnpm build",
+    "hook_runner": "lefthook"
+  },
+  "commands": {
+    "init": { "run": "node adapters/node/scripts/init.mjs" },
+    "generate-context": { "run": "node adapters/node/scripts/generate-context.mjs" },
+    "validate": { "run": "node adapters/node/scripts/validate.mjs" },
+    "check-updates": { "run": "node adapters/node/scripts/check-updates.mjs" },
+    "apply-updates": { "run": "node adapters/node/scripts/apply-updates.mjs" },
+    "submit-feedback": { "run": "node adapters/node/scripts/submit-feedback.mjs" },
+    "health": { "run": "node adapters/node/scripts/health.mjs" },
+    "crosswalk": { "run": "node adapters/node/scripts/crosswalk.mjs --offline" },
+    "hook-install": { "run": "pnpm exec lefthook install" }
+  },
+  "sync_paths": ["adapters/node/"],
+  "forbidden_sync_globs": [
+    "adapters/python/**",
+    "3_bootstrap_scripts/**/*.py",
+    "agent_platform/**",
+    "agentic/**/*.py"
+  ],
+  "aliases": {
+    "onboard": "crosswalk"
+  }
+}

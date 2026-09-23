@@ -1,0 +1,285 @@
+# Fleet upgrade ledger — Wave 0.5 full ratchet + Wave E backlog pointer
+
+schema_version: 1
+updated: "2026-08-27"
+default_mode: pr
+hub_target_version: "4.15.2"
+notes: >
+  Wave 0.5 (fleet-ratchet-full): PR-per-repo template ratchet to 4.15.0;
+  merge green internals; leave red/LIVE open; NA-13 separate reviewed PR #32;
+  NA-14/NA-16 deliberately deferred. See docs/factory/FLEET_RATCHET_REPORT.md.
+  Wave E: fleet_backlog points at durable open-item capture for daemon/ratchet.
+
+fleet_backlog:
+  path: docs/factory/FLEET_BACKLOG.md
+  machine_path: docs/factory/FLEET_BACKLOG.yaml
+  status_verb: status
+  resurfaces_via:
+    - "./meta.ps1 status"
+    - "FLEET_LEDGER.fleet_backlog"
+    - "Wave F daemon (planned)"
+
+repos:
+  - repository: xoate0100/project_initializer
+    adapter: python
+    product_stack: python
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T07:00:00Z"
+    result: ok
+    last_error: null
+    pr_url: null
+
+  - repository: xoate0100/4Q-Wealth-website
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/4Q-Wealth-website/pull/4"
+
+  - repository: xoate0100/CRL_Lights_Landing
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red — validate fail; PR left open"
+    pr_url: "https://github.com/xoate0100/CRL_Lights_Landing/pull/34"
+
+  - repository: xoate0100/CRL_ProposalGeneration
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red — architecture-check fail; PR left open"
+    pr_url: "https://github.com/xoate0100/CRL_ProposalGeneration/pull/40"
+
+  - repository: xoate0100/crypto-trading-bot
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red — Agentic Development Gates fail; PR left open"
+    pr_url: "https://github.com/xoate0100/crypto-trading-bot/pull/68"
+
+  - repository: xoate0100/CutRatesLawnWebSite
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:45:00Z"
+    result: skipped
+    last_error: "CI red — verify fail; PR left open"
+    pr_url: "https://github.com/xoate0100/CutRatesLawnWebSite/pull/3"
+
+  - repository: xoate0100/CutRatesLMS
+    adapter: python
+    product_stack: php
+    governance_runtime: python
+    hub_version: "4.9.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:50:00Z"
+    result: skipped
+    last_error: "LIVE — PR #46 open; CI red; confirm before merge"
+    pr_url: "https://github.com/xoate0100/CutRatesLMS/pull/46"
+
+  - repository: xoate0100/daniels-entity-governance
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:45:00Z"
+    result: skipped
+    last_error: "CI red; PR left open"
+    pr_url: "https://github.com/xoate0100/daniels-entity-governance/pull/2"
+
+  - repository: xoate0100/executive-os
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/executive-os/pull/3"
+
+  - repository: xoate0100/gads_documentation
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/gads_documentation/pull/2"
+
+  - repository: xoate0100/google-form-generator-cli
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:45:00Z"
+    result: skipped
+    last_error: "CI red; PR left open"
+    pr_url: "https://github.com/xoate0100/google-form-generator-cli/pull/22"
+
+  - repository: xoate0100/google-workspace-coordination
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red — agentic-validate fail; PR left open"
+    pr_url: "https://github.com/xoate0100/google-workspace-coordination/pull/9"
+
+  - repository: xoate0100/google_classroom_generator
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:45:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/google_classroom_generator/pull/11"
+
+  - repository: xoate0100/Kiwi_Art_Factory
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red — agentic-coordination fail; PR left open"
+    pr_url: "https://github.com/xoate0100/Kiwi_Art_Factory/pull/6"
+
+  - repository: xoate0100/Kiwi_Art_Forge
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red; PR left open"
+    pr_url: "https://github.com/xoate0100/Kiwi_Art_Forge/pull/3"
+
+  - repository: xoate0100/Kiwi_Platform
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red; PR left open"
+    pr_url: "https://github.com/xoate0100/Kiwi_Platform/pull/65"
+
+  - repository: xoate0100/learn_rephase
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/learn_rephase/pull/2"
+
+  - repository: xoate0100/lightsail-vpn
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/lightsail-vpn/pull/1"
+
+  - repository: xoate0100/neural-vector-intercept
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/neural-vector-intercept/pull/2"
+
+  - repository: xoate0100/surewealth-course-factory
+    adapter: node
+    product_stack: typescript
+    governance_runtime: node
+    hub_version: "4.0.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:00:00Z"
+    result: skipped
+    last_error: "NA-14 deferred — not touched this pass"
+    pr_url: null
+
+  - repository: xoate0100/surewealth-education-platform
+    adapter: node
+    product_stack: typescript
+    governance_runtime: node
+    hub_version: "3.0.0-adapted"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:55:00Z"
+    result: skipped
+    last_error: "LIVE template PR #31 open; NA-13 migration PR #32 REVIEW REQUIRED (not merged)"
+    pr_url: "https://github.com/xoate0100/surewealth-education-platform/pull/32"
+
+  - repository: xoate0100/Surewealth-mainsite
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.15.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: ok
+    last_error: null
+    pr_url: "https://github.com/xoate0100/Surewealth-mainsite/pull/21"
+
+  - repository: xoate0100/web-app
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "1.4.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:00:00Z"
+    result: skipped
+    last_error: "blocked-major-gap — dedicated migration required"
+    pr_url: null
+
+  - repository: xoate0100/white-paper-sites
+    adapter: python
+    product_stack: unknown
+    governance_runtime: python
+    hub_version: "4.2.0"
+    module_versions: {}
+    last_crosswalk: "2026-08-27T06:30:00Z"
+    result: skipped
+    last_error: "CI red — validate fail; PR left open"
+    pr_url: "https://github.com/xoate0100/white-paper-sites/pull/10"

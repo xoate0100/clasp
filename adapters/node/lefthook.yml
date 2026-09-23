@@ -1,0 +1,17 @@
+# Lefthook config for the Node reference adapter (HOOK_CONTRACT.md)
+# Install: pnpm exec lefthook install  (from adapters/node or via meta hook-install)
+
+pre-commit:
+  commands:
+    syntax:
+      run: node adapters/node/scripts/checks/syntax.mjs
+    format:
+      run: node adapters/node/scripts/checks/format.mjs
+    security:
+      run: node adapters/node/scripts/checks/security.mjs
+    architecture:
+      run: node adapters/node/scripts/checks/architecture.mjs
+    guardrails:
+      run: node adapters/node/scripts/checks/guardrails.mjs
+    tests:
+      run: node adapters/node/scripts/validate.mjs --tests-only

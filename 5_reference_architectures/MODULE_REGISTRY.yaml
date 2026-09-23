@@ -1,0 +1,76 @@
+version: 1
+updated: '2026-08-22'
+modules:
+- module_id: hub-placeholder
+  version: 0.0.0
+  governance_runtime: python
+  product_stack: multi
+  provides:
+  - placeholder
+  requires: []
+  protected_paths: []
+  description: 'Wave 0 placeholder seed so MODULE_REGISTRY + MODULES.lock validate
+    end-to-end.
+
+    '
+- module_id: content-ir
+  version: 1.1.0
+  governance_runtime: python
+  product_stack: multi
+  provides:
+  - content-ir-schemas
+  - content-ir-fixtures
+  requires: []
+  protected_paths:
+  - 7_schemas/content_ir/
+  - fixtures/content_ir/
+  - 5_reference_architectures/content_ir/
+  description: 'Content Factory Wave 1 contracts (schemas only). Display name content.ir.
+    No generation/render runtime in this module version.
+
+    '
+- module_id: factory-kernel
+  version: 1.0.0
+  governance_runtime: python
+  product_stack: multi
+  provides:
+  - factory-kernel-runtime
+  - factory-kernel-schemas
+  requires: []
+  protected_paths:
+  - backend/factory_kernel/
+  - 7_schemas/factory_kernel/
+  - fixtures/factory_kernel/
+  description: 'Domain-blind factory kernel (queue, protocols, spend, hashing). No
+    LLM/TTS/render.
+
+    '
+- module_id: factory-generate
+  version: 1.0.0
+  governance_runtime: python
+  product_stack: multi
+  provides:
+  - factory-generate-runtime
+  requires:
+  - factory-kernel
+  - content-ir
+  protected_paths:
+  - backend/factory_generate/
+  - fixtures/factory_generate/
+  description: 'Generation stage with recorded-fixture transport only.
+
+    '
+- module_id: factory-render
+  version: 1.0.0
+  governance_runtime: node
+  product_stack: multi
+  provides:
+  - factory-render-runtime
+  requires:
+  - content-ir
+  - factory-kernel
+  protected_paths:
+  - packages/factory-render/
+  - fixtures/factory_render/
+  description: Still-per-shot renderer (Playwright + ffmpeg-static). Offline narrator
+    only.

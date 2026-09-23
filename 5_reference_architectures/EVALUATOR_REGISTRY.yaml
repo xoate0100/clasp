@@ -1,0 +1,51 @@
+version: "1.0.0"
+updated: "2026-07-17"
+description: Independent evaluators that control completion and release gates
+
+evaluators:
+  - id: EV.agentic.coordination
+    version: "1.0.0"
+    description: Validate agentic registries and coordination scripts
+    implementation_ref: 3_bootstrap_scripts/agentic_coordinate_validate.py
+    score_scale: binary
+    pass_threshold: 1.0
+    can_block: true
+    deterministic: true
+
+  - id: EV.schema.capability_registry
+    version: "1.0.0"
+    description: Validate capability registry structure and duplicates
+    implementation_ref: 3_bootstrap_scripts/platform_validate.py
+    score_scale: binary
+    pass_threshold: 1.0
+    can_block: true
+    deterministic: true
+
+  - id: EV.governance.drift
+    version: "1.0.0"
+    description: Cross-check feature flags vs sandbox forbidden paths
+    implementation_ref: 3_bootstrap_scripts/governance_drift_validate.py
+    score_scale: binary
+    pass_threshold: 1.0
+    can_block: true
+    deterministic: true
+
+  - id: EV.reference.paths
+    version: "1.0.0"
+    description: Validate Python imports and repo path references
+    implementation_ref: 3_bootstrap_scripts/reference_validate.py
+    score_scale: binary
+    pass_threshold: 1.0
+    can_block: false
+    deterministic: true
+
+  - id: EV.content.blog_article
+    version: "1.0.0"
+    description: >
+      Deterministic blog.article compiler — scores IR + spoke override (+ optional
+      projected HTML). Agent-scored dimensions recorded, never gate alone.
+    implementation_ref: 3_bootstrap_scripts/content/blog_evaluate.py
+    score_scale: binary
+    pass_threshold: 1.0
+    can_block: true
+    deterministic: true

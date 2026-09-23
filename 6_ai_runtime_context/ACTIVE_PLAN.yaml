@@ -1,0 +1,18 @@
+plan_id: clasp-child-init
+component: backend
+goal: Initialize clasp as a project_initializer child without relocating the CLI
+tasks:
+- id: 1
+  name: Confirm node adapter and inherited template version
+  outputs:
+  - 0_phase0_bootstrap/stack_adapter.yaml
+  - 0_phase0_bootstrap/META_FRAMEWORK_VERSION.yaml
+- id: 2
+  name: Preserve clasp source, tests, and existing CI
+  outputs:
+  - src/index.ts
+  - test/
+  - .github/
+status: active
+auto_commit: false
+commit_frequency: manual

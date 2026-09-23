@@ -1,0 +1,274 @@
+{
+  "schema": "capability-descriptor-mapped/v1",
+  "source": "cursor-recursion capabilities/registry.yaml shape (reproduced in Wave A prompt §3; not opened at runtime)",
+  "category": "behavioral",
+  "mapped_at": "2026-08-27",
+  "note": "Representative entries — one rule, one skill, one verification_gate, one tool. Scores map into evaluators[].",
+  "capabilities": [
+    {
+      "id": "CAP-RULE-001",
+      "version": "1.0.0",
+      "name": "Code Presence Is Not Implementation",
+      "description": "Reject treating file presence as proof of working capability",
+      "category": "behavioral",
+      "maturity": "installed",
+      "risk_level": "medium",
+      "approval_policy": "advisory",
+      "contract": {
+        "spec": "Rule: code presence is not implementation — verification required before claiming done",
+        "inputs": {
+          "claim": { "type": "object" },
+          "evidence": { "type": "object" }
+        },
+        "outputs": {
+          "verdict": { "type": "string", "enum": ["accept", "reject"] }
+        }
+      },
+      "conformance_suite": {
+        "suite_id": "CAP-RULE-001.eval",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "rule-reject-presence-only",
+            "input": { "claim": { "files_exist": true }, "tests_ran": false },
+            "expect": { "outcome": "reject", "error_code": "PRESENCE_ONLY" }
+          },
+          {
+            "id": "rule-accept-with-eval",
+            "input": { "claim": { "files_exist": true }, "tests_ran": true, "tests_passed": true },
+            "expect": { "outcome": "pass" }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "markdown+hooks",
+        "path": "capabilities/rules/CAP-RULE-001.md",
+        "repository": "xoate0100/cursor-recursion",
+        "notes": "Behavioral rule body lives in cursor-recursion; mapped here for schema proof only"
+      },
+      "agent_manifest": {
+        "summary": "Behavioral rule forbidding presence-as-implementation claims.",
+        "may_override": [
+          { "path": "reference_implementation.path", "reason": "Wording may localize; semantics must hold" }
+        ],
+        "must_pass": [
+          {
+            "requirement": "Presence-only claims reject; evaluated claims pass",
+            "conformance_case_ids": ["rule-reject-presence-only", "rule-accept-with-eval"]
+          }
+        ]
+      },
+      "dependencies": [],
+      "evaluators": [
+        {
+          "id": "CAP-RULE-001.eval",
+          "suite": "CAP-RULE-001.eval",
+          "baseline_score": 0.35,
+          "enhanced_score": 0.88,
+          "evidence_strength": "implemented",
+          "last_validated": "2026-08-01"
+        }
+      ],
+      "provenance": {
+        "type": "rule",
+        "status": "installed",
+        "family": "verification",
+        "source_patterns": ["claims done without tests"],
+        "source_failure_modes": ["presence_as_proof"],
+        "activation_conditions": ["capability_claim"],
+        "exclusion_conditions": ["docs_only_change"]
+      }
+    },
+    {
+      "id": "CAP-SKILL-001",
+      "version": "1.0.0",
+      "name": "Structured Completion Report",
+      "description": "Skill: emit a structured task completion report with judgment calls",
+      "category": "behavioral",
+      "maturity": "candidate",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Skill that produces a completion report with acceptance table + judgment calls"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP-SKILL-001.eval",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "skill-report-has-judgments",
+            "input": { "task_id": 1 },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.judgment_calls", "op": "exists" }]
+            }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "markdown",
+        "path": "capabilities/skills/CAP-SKILL-001.md",
+        "repository": "xoate0100/cursor-recursion"
+      },
+      "agent_manifest": {
+        "summary": "Emit structured completion reports.",
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Report template may vary by repo" }
+        ],
+        "must_pass": [
+          {
+            "requirement": "Report includes judgment_calls",
+            "conformance_case_ids": ["skill-report-has-judgments"]
+          }
+        ]
+      },
+      "dependencies": [],
+      "evaluators": [
+        {
+          "id": "CAP-SKILL-001.eval",
+          "suite": "CAP-SKILL-001.eval",
+          "baseline_score": 0.5,
+          "enhanced_score": 0.72,
+          "evidence_strength": "family_hypothesis"
+        }
+      ],
+      "provenance": {
+        "type": "skill",
+        "status": "candidate",
+        "family": "documentation",
+        "source_patterns": ["missing judgment calls in reports"]
+      }
+    },
+    {
+      "id": "CAP-GATE-001",
+      "version": "1.0.0",
+      "name": "Pre-Merge Conformance Gate",
+      "description": "Verification gate: block merge when capability conformance suite fails",
+      "category": "behavioral",
+      "maturity": "under_evaluation",
+      "risk_level": "high",
+      "approval_policy": "human_required",
+      "contract": {
+        "spec": "Gate that fails closed when declared conformance cases do not pass"
+      },
+      "conformance_suite": {
+        "suite_id": "CAP-GATE-001.eval",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "gate-blocks-on-fail",
+            "input": { "suite_result": "fail" },
+            "expect": { "outcome": "reject", "error_code": "CONFORMANCE_FAIL" }
+          },
+          {
+            "id": "gate-allows-on-pass",
+            "input": { "suite_result": "pass" },
+            "expect": { "outcome": "pass" }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "ci",
+        "path": "capabilities/gates/CAP-GATE-001.yaml",
+        "repository": "xoate0100/cursor-recursion"
+      },
+      "agent_manifest": {
+        "summary": "Verification gate enforcing conformance before merge.",
+        "may_override": [
+          { "path": "reference_implementation.path", "reason": "CI wiring differs by stack" }
+        ],
+        "must_pass": [
+          {
+            "requirement": "Fail closed on suite failure",
+            "conformance_case_ids": ["gate-blocks-on-fail", "gate-allows-on-pass"]
+          }
+        ],
+        "must_not_change": ["approval_policy"]
+      },
+      "dependencies": [],
+      "evaluators": [
+        {
+          "id": "CAP-GATE-001.eval",
+          "suite": "CAP-GATE-001.eval",
+          "baseline_score": null,
+          "enhanced_score": 0.6,
+          "evidence_strength": "heuristic_only"
+        }
+      ],
+      "provenance": {
+        "type": "verification_gate",
+        "status": "under_evaluation",
+        "family": "ci_gates"
+      }
+    },
+    {
+      "id": "CAP-TOOL-001",
+      "version": "1.0.0",
+      "name": "Knowledge Query Tool",
+      "description": "Tool: query a mined knowledge index with validated inputs",
+      "category": "behavioral",
+      "maturity": "hypothesis",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "ITool-shaped query tool over a knowledge index",
+        "inputs": { "query": { "type": "string", "required": true } },
+        "outputs": { "hits": { "type": "array" } }
+      },
+      "conformance_suite": {
+        "suite_id": "CAP-TOOL-001.eval",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "tool-reject-empty-query",
+            "input": { "query": "" },
+            "expect": { "outcome": "reject", "error_code": "EMPTY_QUERY" }
+          },
+          {
+            "id": "tool-returns-hits",
+            "input": { "query": "capability descriptor" },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.hits", "op": "type", "value": "array" }]
+            }
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "capabilities/tools/knowledge_query.py",
+        "repository": "xoate0100/cursor-recursion"
+      },
+      "agent_manifest": {
+        "summary": "Query tool with validate-before-invoke semantics (ITool harvest).",
+        "inputs": { "query": { "type": "string", "required": true } },
+        "outputs": { "hits": { "type": "array" } },
+        "may_override": [
+          { "path": "reference_implementation", "reason": "Index backends differ" }
+        ],
+        "must_pass": [
+          {
+            "requirement": "Validate inputs; return hits array",
+            "conformance_case_ids": ["tool-reject-empty-query", "tool-returns-hits"]
+          }
+        ]
+      },
+      "dependencies": ["knowledge.mine"],
+      "evaluators": [
+        {
+          "id": "CAP-TOOL-001.eval",
+          "suite": "CAP-TOOL-001.eval",
+          "baseline_score": 0.2,
+          "enhanced_score": null,
+          "evidence_strength": "heuristic_only"
+        }
+      ],
+      "provenance": {
+        "type": "tool",
+        "status": "hypothesis",
+        "family": "knowledge",
+        "execution_mode": "on_demand"
+      }
+    }
+  ]
+}

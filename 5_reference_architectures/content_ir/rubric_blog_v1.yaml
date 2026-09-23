@@ -1,0 +1,40 @@
+# Rubric — blog.article v1 (SW-BLOG-002 / SW-BLOG-007)
+rubric_id: content-ir-rubric-blog-v1
+version: "1.0.0"
+dimensions:
+  - id: d1_intent_fit
+    name: Intent fit (funnel + pillar)
+    weight: 0.15
+    scoring: deterministic
+    gates: true
+  - id: d2_grounding
+    name: Grounding (sources + statistic claims)
+    weight: 0.15
+    scoring: deterministic
+    gates: true
+  - id: d3_structure
+    name: Structure (SCAN-01..08)
+    weight: 0.15
+    scoring: deterministic
+    gates: true
+  - id: d4_claims_compliance
+    name: Claims compliance (override rulesets)
+    weight: 0.15
+    scoring: deterministic
+    gates: true
+  - id: d5_clarity
+    name: Clarity (reading level band from override)
+    weight: 0.1
+    scoring: deterministic
+    gates: true
+  - id: d6_voice
+    name: Voice fidelity
+    weight: 0.15
+    scoring: agent_scored
+    gates: false
+    voice_spec_ref: 5_reference_architectures/content_ir/voice.blog.template.yaml
+  - id: d7_eeat
+    name: EEAT authorship and sources
+    weight: 0.15
+    scoring: deterministic
+    gates: true

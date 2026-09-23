@@ -1,0 +1,38 @@
+{
+  "adapter_id": "generic",
+  "schema_version": "1.1.0",
+  "governance_runtime": "generic",
+  "product_stack": "unknown",
+  "display_name": "Generic / Unknown-Stack Fallback",
+  "description": "Graceful fallback when no known product stack adapter is registered.",
+  "toolchain": {
+    "runtimes": [
+      {
+        "name": "python",
+        "min_version": "3.10",
+        "version_command": "python --version"
+      }
+    ],
+    "package_manager": "none",
+    "hook_runner": "ci-only"
+  },
+  "commands": {
+    "init": { "run": "python adapters/generic/scripts/stub_verb.py init --require python" },
+    "generate-context": { "run": "python adapters/generic/scripts/stub_verb.py generate-context --require python" },
+    "validate": { "run": "python adapters/generic/scripts/stub_verb.py validate --require python" },
+    "check-updates": { "run": "python adapters/generic/scripts/stub_verb.py check-updates --require python" },
+    "apply-updates": { "run": "python adapters/generic/scripts/stub_verb.py apply-updates --require python" },
+    "submit-feedback": { "run": "python adapters/generic/scripts/stub_verb.py submit-feedback --require python" },
+    "health": { "run": "python adapters/generic/scripts/stub_verb.py health --require python" },
+    "crosswalk": { "run": "python 3_bootstrap_scripts/crosswalk.py --offline" }
+  },
+  "sync_paths": [
+    "adapters/generic/",
+    "1_global_standards/",
+    "5_reference_architectures/",
+    "7_schemas/"
+  ],
+  "aliases": {
+    "onboard": "crosswalk"
+  }
+}

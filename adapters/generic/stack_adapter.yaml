@@ -1,0 +1,53 @@
+# Unknown-stack / graceful fallback adapter (Wave 0 Task 8).
+# Selected when 0_phase0_bootstrap/stack_adapter.yaml is missing or invalid.
+# governance_runtime: generic — product_stack stays informational (unknown).
+
+adapter_id: generic
+schema_version: "1.1.0"
+governance_runtime: generic
+product_stack: unknown
+display_name: Generic / Unknown-Stack Fallback
+description: >
+  Graceful fallback when no known product stack adapter is registered.
+  Required verbs succeed when a minimal toolchain is present, otherwise exit 3
+  naming the missing tool. crosswalk onboard completes via crosswalk.py.
+
+toolchain:
+  runtimes:
+    - name: python
+      min_version: "3.10"
+      version_command: "python --version"
+  package_manager: none
+  hook_runner: ci-only
+
+commands:
+  init:
+    run: "python adapters/generic/scripts/stub_verb.py init --require python"
+  generate-context:
+    run: "python adapters/generic/scripts/stub_verb.py generate-context --require python"
+  validate:
+    run: "python adapters/generic/scripts/stub_verb.py validate --require python"
+  check-updates:
+    run: "python adapters/generic/scripts/stub_verb.py check-updates --require python"
+  apply-updates:
+    run: "python adapters/generic/scripts/stub_verb.py apply-updates --require python"
+  submit-feedback:
+    run: "python adapters/generic/scripts/stub_verb.py submit-feedback --require python"
+  health:
+    run: "python adapters/generic/scripts/stub_verb.py health --require python"
+  crosswalk:
+    run: "python 3_bootstrap_scripts/crosswalk.py --offline"
+
+sync_paths:
+  - "adapters/generic/"
+  - "1_global_standards/"
+  - "5_reference_architectures/"
+  - "7_schemas/"
+
+aliases:
+  onboard: crosswalk
+
+notes: >
+  Unknown-stack children still onboard with `meta crosswalk`. Prefer registering
+  a real adapter (python/node) once the product stack is known — never infer
+  product_stack from governance_runtime (DEC-0005).

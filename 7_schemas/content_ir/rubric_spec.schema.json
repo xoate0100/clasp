@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/rubric_spec.schema.json",
+  "title": "Rubric spec v1 (DEC-FAC-0010)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rubric_id", "version", "dimensions"],
+  "properties": {
+    "rubric_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "dimensions": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 7,
+      "description": "Six dimensions for course/skill rubrics; seven for blog.article (adds EEAT).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "weight"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "weight": { "type": "number", "minimum": 0 },
+          "scoring": {
+            "type": "string",
+            "enum": ["deterministic", "agent_scored"],
+            "description": "deterministic dimensions gate; agent_scored never gate alone"
+          },
+          "gates": {
+            "type": "boolean",
+            "description": "When true, failing this dimension fails the overall gate (deterministic only)"
+          },
+          "voice_spec_ref": {
+            "type": "string",
+            "description": "Required for voice conformance dimensions"
+          }
+        }
+      }
+    }
+  }
+}

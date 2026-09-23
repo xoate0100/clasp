@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/needs_andy_gates.schema.json",
+  "title": "NEEDS-ANDY Gates Ledger",
+  "description": "Machine-checkable decision ledger for AUTO vs GATE items during stack-agnostic upgrades.",
+  "type": "object",
+  "required": ["meta", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["schema_version", "version_target", "prime_directive", "answered", "blocked"],
+      "additionalProperties": true,
+      "properties": {
+        "schema_version": { "type": "string" },
+        "version_target": { "type": "string" },
+        "prime_directive": { "type": "string" },
+        "answered": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "updated": { "type": "string" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "class", "recommendation", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^NA-[0-9]{2,}$"
+          },
+          "question": { "type": "string", "minLength": 1 },
+          "class": { "type": "string", "enum": ["auto", "gate"] },
+          "recommendation": { "type": "string", "minLength": 1 },
+          "decision": { "type": ["string", "null"] },
+          "status": {
+            "type": "string",
+            "enum": ["answered", "blocked", "approved"]
+          },
+          "blocks": { "type": ["string", "null"] },
+          "rationale": { "type": "string" },
+          "tradeoff": { "type": "string" },
+          "dec_ref": { "type": ["string", "null"] }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "class": { "const": "gate" }, "status": { "const": "blocked" } },
+              "required": ["class", "status"]
+            },
+            "then": {
+              "required": ["blocks"]
+            }
+          },
+          {
+            "if": {
+              "properties": { "status": { "const": "answered" } },
+              "required": ["status"]
+            },
+            "then": {
+              "required": ["decision"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

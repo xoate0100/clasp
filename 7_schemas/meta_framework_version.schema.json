@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meta-framework.io/schemas/meta_framework_version.schema.json",
+  "title": "Meta-Framework Version Manifest Schema",
+  "description": "Tracks template version, features, and update history for template-based projects.",
+  "version": "1.0.0",
+
+  "type": "object",
+  "required": ["template_version", "installed_at", "update_history"],
+
+  "properties": {
+    "template_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
+      "description": "Semantic version of the template (e.g., 1.0.0, 1.2.3-beta)"
+    },
+    "template_repo": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the template repository (for pulling updates)"
+    },
+    "installed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this template version was installed/initialized"
+    },
+    "last_updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When template was last updated (null if never updated)"
+    },
+    "update_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from_version", "to_version", "updated_at"],
+        "properties": {
+          "from_version": { "type": "string" },
+          "to_version": { "type": "string" },
+          "updated_at": { "type": "string", "format": "date-time" },
+          "migration_applied": { "type": "boolean" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "description": "Feature flags and capabilities available in this template version",
+      "properties": {
+        "dynamic_layout_adaptation": { "type": "boolean" },
+        "guided_initialization": { "type": "boolean" },
+        "dynamic_ai_context": { "type": "boolean" },
+        "template_versioning": { "type": "boolean" },
+        "drift_detection": { "type": "boolean" }
+      }
+    },
+    "template_directories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Directories that are part of the template and can be updated"
+    },
+    "project_directories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Directories that are project-specific and should not be overwritten"
+    },
+    "protected_files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Template files that should not be overwritten during updates (project customizations)"
+    }
+  }
+}
+

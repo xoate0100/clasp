@@ -1,0 +1,15 @@
+# Optional phase-gate keywords — map future-phase work to keyword triggers.
+# Customize per project; empty phases mean only path-based checks apply.
+version: 1
+updated: "2026-07-05"
+
+# Example structure (uncomment and customize):
+# phase_keywords:
+#   phase_2_features:
+#     - "payment integration"
+#     - "mobile app shell"
+#   phase_3_scale:
+#     - "kubernetes"
+#     - "multi-region"
+
+phase_keywords: {}

@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/projections/blog_wordpress.projection.schema.json",
+  "title": "Projection target — blog.wordpress",
+  "description": "Output shape BP3 implements for WordPress. Hub ships schema + evaluator invariants only (DEC-CP-0012).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "html",
+    "title",
+    "slug",
+    "excerpt",
+    "meta",
+    "taxonomy_refs",
+    "image_slots",
+    "shortcodes_used",
+    "media_uploads"
+  ],
+  "properties": {
+    "html": {
+      "type": "string",
+      "description": "post_content HTML. Must satisfy projection invariants (see x-invariants)."
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "slug": { "type": "string", "minLength": 1 },
+    "excerpt": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "taxonomy_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "image_slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot_id", "alt"],
+        "properties": {
+          "slot_id": { "type": "string" },
+          "placement": { "type": "string" },
+          "envato_item_url": { "type": "string" },
+          "preview_url": { "type": "string" },
+          "alt": { "type": "string" }
+        }
+      }
+    },
+    "shortcodes_used": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "media_uploads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["upload_id", "kind", "source_svg_ref", "mime", "alt"],
+        "properties": {
+          "upload_id": { "type": "string", "minLength": 1 },
+          "kind": {
+            "type": "string",
+            "enum": ["diagram_raster"]
+          },
+          "source_svg_ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Run-artifact path/id for the source SVG (kept off post_content)"
+          },
+          "mime": {
+            "type": "string",
+            "enum": ["image/png", "image/webp"]
+          },
+          "alt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "From diagram.title/desc"
+          }
+        }
+      }
+    },
+    "disclosure_present": {
+      "type": "boolean",
+      "description": "Convenience flag; evaluator also inspects html"
+    }
+  },
+  "x-invariants": [
+    {
+      "id": "INV-WP-01",
+      "rule": "no style= attributes in html",
+      "rationale": "Classes are the contract; theme owns look"
+    },
+    {
+      "id": "INV-WP-02",
+      "rule": "no application/ld+json FAQPage (or any FAQPage JSON-LD) in html",
+      "rationale": "Theme emits FAQPage from details/summary; a second source duplicates schema"
+    },
+    {
+      "id": "INV-WP-03",
+      "rule": "no inline <svg> in html",
+      "rationale": "WordPress content filtering strips inline SVG (observed 2026-09-22 on post 2647: figure+caption survived, diagram did not). Diagrams must be uploaded raster media with alt from diagram.title/desc; SVG remains a run artifact."
+    },
+    {
+      "id": "INV-WP-04",
+      "rule": "FAQ rendered as details/summary pairs",
+      "rationale": "Native accordion; theme schema source"
+    },
+    {
+      "id": "INV-WP-05",
+      "rule": "component markup uses classes prefixed by override.components.class_prefix",
+      "rationale": "Namespace is business data, not hub vocabulary"
+    },
+    {
+      "id": "INV-WP-06",
+      "rule": "disclosure block present exactly once",
+      "rationale": "Compliance footer must appear once"
+    }
+  ]
+}

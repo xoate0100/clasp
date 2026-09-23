@@ -1,0 +1,92 @@
+version: "1.0.0"
+updated: "2026-07-17"
+description: Canonical capability registry for the self-improving agent platform
+
+capabilities:
+  - id: CAP.repo.scan
+    version: "1.0.0"
+    name: Repository Scanner
+    description: Build typed RepositoryProfile from filesystem and git state
+    category: observation
+    maturity: production
+    risk_level: low
+    implementation_ref: agent_platform/layer0/repository_scanner.py
+    evaluators: [EV.schema.capability_registry]
+    idempotency: true
+
+  - id: CAP.evidence.collect
+    version: "1.0.0"
+    name: Evidence Collector
+    description: Collect attributable evidence bundle from repository paths
+    category: observation
+    maturity: production
+    risk_level: low
+    implementation_ref: agent_platform/layer1/evidence_collector.py
+    evaluators: []
+    dependencies: [CAP.repo.scan]
+
+  - id: CAP.model.build
+    version: "1.0.0"
+    name: System Model Builder
+    description: Build SystemModel and detect structural disconnects
+    category: interpretation
+    maturity: production
+    risk_level: low
+    implementation_ref: agent_platform/layer2/system_model_builder.py
+    dependencies: [CAP.evidence.collect]
+
+  - id: CAP.plan.compile
+    version: "1.0.0"
+    name: Capability Compiler
+    description: Compile goal into typed capability execution plan
+    category: planning
+    maturity: production
+    risk_level: medium
+    implementation_ref: agent_platform/layer3/capability_compiler.py
+    dependencies: [CAP.model.build]
+    evaluators: [EV.schema.capability_registry]
+
+  - id: CAP.validate.full
+    version: "1.0.0"
+    name: Full Platform Validation
+    description: Run evaluator registry and capability schema checks
+    category: evaluation
+    maturity: production
+    risk_level: low
+    implementation_ref: 3_bootstrap_scripts/platform_cli.py
+    evaluators:
+      - EV.agentic.coordination
+      - EV.schema.capability_registry
+      - EV.governance.drift
+
+  - id: CAP.migration.plan
+    version: "1.0.0"
+    name: Migration Planner
+    description: Dry-run template upgrade and ownership-aware migration plan
+    category: migration
+    maturity: preview
+    risk_level: high
+    implementation_ref: 3_bootstrap_scripts/template_update.py
+    approval_policy: human_required
+    evaluators: [EV.reference.paths]
+
+  - id: CAP.migration.apply
+    version: "1.0.0"
+    name: Migration Apply
+    description: Apply approved template migration with rollback support
+    category: migration
+    maturity: preview
+    risk_level: critical
+    implementation_ref: 3_bootstrap_scripts/template_update.py
+    approval_policy: human_required
+    dependencies: [CAP.migration.plan]
+
+  - id: CAP.release.prepare
+    version: "1.0.0"
+    name: Release Preparation
+    description: Validate release readiness and emit manifests
+    category: release
+    maturity: preview
+    risk_level: high
+    implementation_ref: 3_bootstrap_scripts/platform_cli.py
+    evaluators: [EV.agentic.coordination]

@@ -1,0 +1,58 @@
+# RAG knowledge source registry — customize paths for your project docs.
+version: 1
+updated: "2026-07-05"
+
+index:
+  output_dir: 6_ai_runtime_context/knowledge_index
+  chunk_max_chars: 1200
+  chunk_overlap: 150
+  backend: bm25
+
+sources:
+  - id: constitution
+    path: 1_global_standards/AI_OPERATING_CONSTITUTION.md
+    priority: 1
+    tags: [governance, axioms]
+
+  - id: solid_principles
+    path: 1_global_standards/SOLID_PRINCIPLES.md
+    priority: 2
+    tags: [standards, architecture]
+
+  - id: mvp_spec
+    path: 0_phase0_bootstrap/MVP_SPECIFICATION.yaml
+    priority: 1
+    tags: [mvp, phases, constraints]
+
+  - id: active_plan
+    path: 6_ai_runtime_context/ACTIVE_PLAN.yaml
+    priority: 1
+    tags: [current_work]
+
+  - id: decision_registry
+    path: 5_reference_architectures/DECISION_REGISTRY.yaml
+    priority: 1
+    tags: [decisions, guardrails]
+
+  - id: drift_vectors
+    path: 5_reference_architectures/DRIFT_VECTORS.yaml
+    priority: 1
+    tags: [drift, guardrails]
+
+  - id: layer_rules
+    path: 5_reference_architectures/LAYER_RULES.yaml
+    priority: 2
+    tags: [architecture]
+
+  - id: meta_overview
+    path: docs/meta_overview.md
+    priority: 3
+    tags: [onboarding, framework]
+    enabled: true
+    optional: true
+
+  - id: readme
+    path: README.md
+    priority: 3
+    tags: [onboarding]
+    enabled: true

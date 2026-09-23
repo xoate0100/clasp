@@ -1,0 +1,27 @@
+version: "1.0.0"
+updated: "2026-07-17"
+description: Versioned semantic taxonomy for repository classification
+
+categories:
+  CAP.repo.initializer_managed:
+    description: Repository uses project_initializer version manifest
+    parent: CAP.repo
+  ARCH.pattern.backend_service:
+    description: Backend service architecture detected
+    parent: ARCH.pattern
+  REL.risk.dirty_worktree:
+    description: Git working tree has uncommitted changes
+    parent: REL.risk
+  DEBT.type.disconnected_capability:
+    description: Declared capability or wiring is missing
+    parent: DEBT.type
+  MIG.risk.schema_change:
+    description: Goal involves migration or schema change
+    parent: MIG.risk
+
+parents:
+  CAP.repo: Application repository classification
+  ARCH.pattern: Architecture pattern labels
+  REL.risk: Reliability and operational risk
+  DEBT.type: Technical debt classification
+  MIG.risk: Migration risk classification

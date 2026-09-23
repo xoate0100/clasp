@@ -1,0 +1,52 @@
+# Named anti-patterns — recognizable failure modes across agent sessions.
+# Extend with project-specific drift vectors; link to DECISION_REGISTRY where applicable.
+version: 1
+updated: "2026-07-05"
+
+vectors:
+  - id: DV_HOOK_BYPASS
+    description: "Skipping pre-commit hooks or guardrails to force commits through"
+    source: 1_global_standards/AI_OPERATING_CONSTITUTION.md
+    detection: "Commit messages or docs suggesting --no-verify or hook bypass"
+    trigger_patterns:
+      - "--no-verify"
+      - "skip hooks"
+      - "bypass pre-commit"
+
+  - id: DV_GOVERNANCE_DIRECT_EDIT
+    description: "Direct edits to locked governance files outside the decision registry process"
+    source: 5_reference_architectures/AGENT_REGISTRY.yaml write_policy
+    detection: "Staged changes to DECISION_REGISTRY.yaml or MVP_SPECIFICATION.yaml without --propose"
+    trigger_patterns:
+      - "DECISION_REGISTRY.yaml"
+      - "MVP_SPECIFICATION.yaml"
+
+  - id: DV_PREMATURE_ORCHESTRATION
+    description: "Standing up Kubernetes/orchestration before a real multi-service scaling need exists"
+    source: docs/architecture/ (project-specific — customize)
+    detection: "Helm/k8s manifests added without documented scaling criteria"
+    trigger_patterns:
+      - "kind:\\s*Deployment"
+      - "helm chart"
+      - "kubernetes manifest"
+
+  - id: DV_DB_FROM_API
+    description: "Direct DB calls from api/ or domain/ layers, bypassing infra/"
+    source: 5_reference_architectures/LAYER_RULES.yaml
+    detection: "Already caught by architecture_check.py — cross-reference only"
+    trigger_patterns:
+      - "from sqlalchemy"
+      - "import psycopg"
+
+  - id: DV_SPLIT_WITHOUT_CRITERIA
+    description: "Repo split proposed without documented split criteria"
+    source: docs/architecture/ (project-specific — customize)
+    detection: "resurrection_trigger_keywords for DEC-0001 found in a diff"
+    linked_decision: DEC-0001-REPO-MODEL
+
+  - id: DV_CI_GUARDRAIL_BYPASS
+    description: "CI runs pre-commit with || true or omits blocking guardrail steps"
+    source: 8_ci/
+    detection: "pr_checks.yml runs pre-commit with || true"
+    trigger_patterns:
+      - "pre-commit run --all-files \\|\\| true"

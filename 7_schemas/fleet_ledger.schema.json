@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/fleet_ledger.schema.json",
+  "title": "Fleet Upgrade Ledger",
+  "description": "Tracks hub crosswalk/ratchet status across in-scope child repositories. Driver defaults to PR mode and must never push to a default branch.",
+  "type": "object",
+  "required": ["schema_version", "updated", "default_mode", "repos"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated": {
+      "type": "string",
+      "description": "ISO-8601 date or datetime of last ledger edit"
+    },
+    "default_mode": {
+      "type": "string",
+      "description": "Driver delivery mode. 'pr' opens/updates PRs; never push to main/master.",
+      "enum": ["pr", "push"]
+    },
+    "hub_target_version": {
+      "type": "string",
+      "description": "Hub template version the fleet is ratcheting toward"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "repos": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/repoEntry" }
+    }
+  },
+  "definitions": {
+    "repoEntry": {
+      "type": "object",
+      "required": [
+        "repository",
+        "adapter",
+        "product_stack",
+        "governance_runtime",
+        "hub_version",
+        "module_versions",
+        "last_crosswalk",
+        "result"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "repository": {
+          "type": "string",
+          "description": "owner/name on the hub remote",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "adapter": {
+          "type": "string",
+          "description": "Selected adapters/<id> directory name"
+        },
+        "product_stack": {
+          "type": "string",
+          "description": "Informational product language/stack (DEC-0005)"
+        },
+        "governance_runtime": {
+          "type": "string",
+          "description": "Runtime that drives lifecycle verbs (DEC-0005)",
+          "enum": ["python", "node", "go", "generic"]
+        },
+        "hub_version": {
+          "type": ["string", "null"],
+          "description": "Last known META_FRAMEWORK_VERSION on the child"
+        },
+        "module_versions": {
+          "type": "object",
+          "description": "map of module_id → version pin",
+          "additionalProperties": { "type": "string" }
+        },
+        "last_crosswalk": {
+          "type": ["string", "null"],
+          "description": "ISO-8601 timestamp of last successful crosswalk, or null"
+        },
+        "result": {
+          "type": "string",
+          "enum": ["pending", "ok", "failed", "skipped", "planned"]
+        },
+        "last_error": {
+          "type": ["string", "null"]
+        },
+        "pr_url": {
+          "type": ["string", "null"],
+          "description": "Open PR URL when mode=pr"
+        }
+      }
+    }
+  }
+}

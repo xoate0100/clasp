@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/capability_agent_manifest.schema.json",
+  "title": "Capability Agent Manifest",
+  "description": "Self-describing override surface for LLM implementers (blueprint §1.2). Informed by EDE ITool.get_tool_manifest() — declare inputs/outputs, validate before execute, state what may change.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["summary", "may_override", "must_pass"],
+  "properties": {
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What this capability is, in one paragraph an agent can act on"
+    },
+    "discovery": {
+      "type": "object",
+      "description": "Generalization of factory /agents discovery",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string" },
+        "entrypoints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "description": "ITool-inspired declared inputs"
+    },
+    "outputs": {
+      "type": "object",
+      "description": "ITool-inspired declared outputs"
+    },
+    "may_override": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "must_pass": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["requirement"],
+        "additionalProperties": false,
+        "properties": {
+          "requirement": { "type": "string" },
+          "conformance_case_ids": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "must_not_change": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

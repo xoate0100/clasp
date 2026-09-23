@@ -1,0 +1,12 @@
+# Voice spec — cutrates.skill (DEC-FAC-0020 / Wave 1.11)
+profile: cutrates.skill
+voice_id: cutrates-field-coach
+tone: direct, plain-language, respectful of field crews
+pace: moderate
+reading_level_target: grade_8
+forbidden:
+  - jargon without definition
+  - sarcasm
+preferred:
+  - short sentences
+  - concrete equipment names

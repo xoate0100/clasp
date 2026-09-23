@@ -1,0 +1,649 @@
+# Meta-Framework Version Manifest
+# This file tracks the template version and enables template updates
+# DO NOT DELETE - Required for template update system
+
+template_version: "4.20.1"
+template_repo: "https://github.com/xoate0100/project_initializer.git"
+installed_at: "2024-01-01T00:00:00Z"
+last_updated_at: "2026-09-22T03:35:00Z"
+
+update_history:
+  - from_version: "4.20.0"
+    to_version: "4.20.1"
+    updated_at: "2026-09-22T03:35:00Z"
+    migration_applied: false
+    notes: "Register blog-evaluate verb in stack_adapter.schema.json (CI conformance)"
+  - from_version: "4.19.10"
+    to_version: "4.20.0"
+    updated_at: "2026-09-22T00:00:00Z"
+    migration_applied: false
+    notes: "BP5 blog.article profile + override + wordpress projection + rubric + EV.content.blog_article evaluator; DEC-CP-0018/0019; agent-driven FACTORY_RUN_CONTRACT §7"
+  - from_version: "4.19.9"
+    to_version: "4.19.10"
+    updated_at: "2026-09-02T16:40:00Z"
+    migration_applied: false
+    notes: "Governance W2 CI fix: vendored E2E registry kit"
+  - from_version: "4.19.8"
+    to_version: "4.19.9"
+    updated_at: "2026-09-02T14:30:00Z"
+    migration_applied: false
+    notes: "Governance gap hunt W2: cluster A/B/C/D wired, sandbox E2E suite, 20/20 gaps gated+tested"
+  - from_version: "4.19.7"
+    to_version: "4.19.8"
+    updated_at: "2026-09-02T04:00:00Z"
+    migration_applied: false
+    notes: "Governance gap hunt W1: lifecycle map, gap registry, registration + suite-loosen gates"
+  - from_version: "4.19.6"
+    to_version: "4.19.7"
+    updated_at: "2026-09-01T22:30:00Z"
+    migration_applied: false
+    notes: "Plumbing closeout: fleet propagation + decisions ledger closed"
+  - from_version: "4.19.4"
+    to_version: "4.19.5"
+    updated_at: "2026-08-30T08:00:00Z"
+    migration_applied: false
+    notes: "Anti-bypass guard CI/pre-commit wiring"
+  - from_version: "4.19.3"
+    to_version: "4.19.4"
+    updated_at: "2026-08-30T07:30:00Z"
+    migration_applied: false
+    notes: "Governance plumbing audit: fleet scan + anti-bypass guard catalog exemptions"
+  - from_version: "4.19.2"
+    to_version: "4.19.3"
+    updated_at: "2026-08-30T05:30:00Z"
+    migration_applied: false
+    notes: "Governance plumbing audit: hub task gates scoped to hub repo via governance_scope.py"
+  - from_version: "4.19.1"
+    to_version: "4.19.2"
+    updated_at: "2026-08-29T04:20:00Z"
+    migration_applied: false
+    notes: "Legacy-workflow-sweep: remove ungoverned auto_fix_issues + process_feedback workflows"
+  - from_version: "4.19.0"
+    to_version: "4.19.1"
+    updated_at: "2026-08-29T02:30:00Z"
+    migration_applied: false
+    notes: "Legacy workflow sweep: exempt propose-only behavioral_daemon from file-level complexity heuristic"
+  - from_version: "4.18.0"
+    to_version: "4.19.0"
+    updated_at: "2026-08-28T00:50:00Z"
+    migration_applied: false
+    notes: "Backlog Clear: Kiwi two-key gate PASS + merge; crypto/daniels/gws stalled; flags unchanged"
+  - from_version: "4.17.0"
+    to_version: "4.18.0"
+    updated_at: "2026-08-27T22:30:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave F complete: remediation agent + Kiwi propose-only PRs"
+  - from_version: "4.16.1"
+    to_version: "4.17.0"
+    updated_at: "2026-08-27T21:10:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave F Half 1: behavioral miner + HALF-1 gate PASS"
+  - from_version: "4.16.0"
+    to_version: "4.16.1"
+    updated_at: "2026-08-27T17:50:00Z"
+    migration_applied: false
+    notes: "Pre-Wave-F cleanup: merge green PRs, CutRatesLMS #47 root-fixed, HUB_FEEDBACK_TOKEN set, live pipes confirmed"
+  - from_version: "4.15.2"
+    to_version: "4.16.0"
+    updated_at: "2026-08-27T16:30:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave E: fleet backlog + piloted workspace.feedback pipe + one durable sink"
+  - from_version: "4.15.1"
+    to_version: "4.15.2"
+    updated_at: "2026-08-27T15:45:00Z"
+    migration_applied: false
+    notes: "Fleet remediation: hub governance recalibration + live spokes green"
+  - from_version: "4.15.0"
+    to_version: "4.15.1"
+    updated_at: "2026-08-27T07:15:00Z"
+    migration_applied: false
+    notes: "Wave 0.5 fleet-ratchet-full: org ratchet + NA-13 reviewed PR; NA-14/NA-16 deferred"
+  - from_version: "4.14.0"
+    to_version: "4.15.0"
+    updated_at: "2026-08-27T05:45:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave D: mcp.connect acid test — same operation as content.generate"
+  - from_version: "4.13.0"
+    to_version: "4.14.0"
+    updated_at: "2026-08-27T05:00:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave C: cross-language inherit-and-override proof (content.generate)"
+  - from_version: "4.12.0"
+    to_version: "4.13.0"
+    updated_at: "2026-08-27T04:30:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave B.5: mined conformance suites that bite (14+ suites)"
+  - from_version: "4.11.0"
+    to_version: "4.12.0"
+    updated_at: "2026-08-27T03:20:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave B: capability-registry L1 + executing conformance + CutRatesLMS pilot"
+  - from_version: "4.10.1"
+    to_version: "4.11.0"
+    updated_at: "2026-08-27T01:50:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave A: unified capability descriptor schema + cross-category proof"
+  - from_version: "4.10.0"
+    to_version: "4.10.1"
+    updated_at: "2026-08-27T01:10:00Z"
+    migration_applied: false
+    notes: "Capability Platform Wave 0 reconnaissance (classify only)"
+  - from_version: "4.9.0"
+    to_version: "4.10.0"
+    updated_at: "2026-08-25T17:00:00Z"
+    migration_applied: false
+    notes: "Wave 5A.5 close-the-loop: factory run + live backends"
+  - from_version: "4.8.22"
+    to_version: "4.9.0"
+    updated_at: "2026-08-24T05:07:19Z"
+    migration_applied: false
+    notes: "Wave4 task12: register factory-render"
+  - from_version: "4.8.21"
+    to_version: "4.8.22"
+    updated_at: "2026-08-24T05:04:25Z"
+    migration_applied: false
+    notes: "Wave4 task12: register factory-render"
+  - from_version: "4.8.20"
+    to_version: "4.8.21"
+    updated_at: "2026-08-24T05:03:21Z"
+    migration_applied: false
+    notes: "Wave4 task11: e2e render"
+  - from_version: "4.8.19"
+    to_version: "4.8.20"
+    updated_at: "2026-08-24T05:02:28Z"
+    migration_applied: false
+    notes: "Wave4 task10: storage"
+  - from_version: "4.8.18"
+    to_version: "4.8.19"
+    updated_at: "2026-08-24T05:01:42Z"
+    migration_applied: false
+    notes: "Wave4 task9: captions"
+  - from_version: "4.8.17"
+    to_version: "4.8.18"
+    updated_at: "2026-08-24T05:00:52Z"
+    migration_applied: false
+    notes: "Wave4 task8: narrator"
+  - from_version: "4.8.16"
+    to_version: "4.8.17"
+    updated_at: "2026-08-24T04:57:12Z"
+    migration_applied: false
+    notes: "Wave4 task8: narrator"
+  - from_version: "4.8.15"
+    to_version: "4.8.16"
+    updated_at: "2026-08-24T04:56:35Z"
+    migration_applied: false
+    notes: "Wave4 task7: templates"
+  - from_version: "4.8.14"
+    to_version: "4.8.15"
+    updated_at: "2026-08-24T04:52:46Z"
+    migration_applied: false
+    notes: "Wave4 task7: templates"
+  - from_version: "4.8.13"
+    to_version: "4.8.14"
+    updated_at: "2026-08-24T04:52:09Z"
+    migration_applied: false
+    notes: "Wave4 task6: encoder handoff"
+  - from_version: "4.8.12"
+    to_version: "4.8.13"
+    updated_at: "2026-08-24T04:47:22Z"
+    migration_applied: false
+    notes: "Wave4 task6: encoder handoff"
+  - from_version: "4.8.11"
+    to_version: "4.8.12"
+    updated_at: "2026-08-24T04:46:45Z"
+    migration_applied: false
+    notes: "Wave4 task5: ffmpeg assembly"
+  - from_version: "4.8.10"
+    to_version: "4.8.11"
+    updated_at: "2026-08-24T04:41:36Z"
+    migration_applied: false
+    notes: "Wave4 task4: asset gate"
+  - from_version: "4.8.9"
+    to_version: "4.8.10"
+    updated_at: "2026-08-24T04:38:32Z"
+    migration_applied: false
+    notes: "Wave4 task4: asset gate"
+  - from_version: "4.8.8"
+    to_version: "4.8.9"
+    updated_at: "2026-08-24T04:34:40Z"
+    migration_applied: false
+    notes: "Wave4 task4: asset gate"
+  - from_version: "4.8.7"
+    to_version: "4.8.8"
+    updated_at: "2026-08-24T04:32:29Z"
+    migration_applied: false
+    notes: "Wave4 task3: shot renderer"
+  - from_version: "4.8.6"
+    to_version: "4.8.7"
+    updated_at: "2026-08-24T04:29:18Z"
+    migration_applied: false
+    notes: "Wave4 task3: shot renderer"
+  - from_version: "4.8.5"
+    to_version: "4.8.6"
+    updated_at: "2026-08-24T04:25:12Z"
+    migration_applied: false
+    notes: "Wave4 task2: renderer problem inventory"
+  - from_version: "4.8.4"
+    to_version: "4.8.5"
+    updated_at: "2026-08-24T04:23:01Z"
+    migration_applied: false
+    notes: "Wave4 task2: renderer problem inventory"
+  - from_version: "4.8.3"
+    to_version: "4.8.4"
+    updated_at: "2026-08-24T04:19:40Z"
+    migration_applied: false
+    notes: "Wave4 task2: renderer problem inventory"
+  - from_version: "4.8.2"
+    to_version: "4.8.3"
+    updated_at: "2026-08-24T04:19:01Z"
+    migration_applied: false
+    notes: "Wave4 task2: renderer problem inventory"
+  - from_version: "4.8.1"
+    to_version: "4.8.2"
+    updated_at: "2026-08-24T04:15:05Z"
+    migration_applied: false
+    notes: "Wave4 task2: renderer problem inventory"
+  - from_version: "4.8.0"
+    to_version: "4.8.1"
+    updated_at: "2026-08-24T04:12:25Z"
+    migration_applied: false
+    notes: "Wave4 task1: activate content-factory-wave4-render"
+  - from_version: "4.7.10"
+    to_version: "4.8.0"
+    updated_at: "2026-08-24T03:57:09Z"
+    migration_applied: false
+    notes: "Wave3 task11: register factory-generate"
+  - from_version: "4.7.9"
+    to_version: "4.7.10"
+    updated_at: "2026-08-24T03:55:50Z"
+    migration_applied: false
+    notes: "Wave3 task10: generate pipeline e2e"
+  - from_version: "4.7.8"
+    to_version: "4.7.9"
+    updated_at: "2026-08-24T03:54:53Z"
+    migration_applied: false
+    notes: "Wave3 task9: content-ir 1.1.0 misconceptions"
+  - from_version: "4.7.7"
+    to_version: "4.7.8"
+    updated_at: "2026-08-24T03:53:38Z"
+    migration_applied: false
+    notes: "Wave3 task8: voice gates"
+  - from_version: "4.7.6"
+    to_version: "4.7.7"
+    updated_at: "2026-08-24T03:52:23Z"
+    migration_applied: false
+    notes: "Wave3 task7: assessment validation"
+  - from_version: "4.7.5"
+    to_version: "4.7.6"
+    updated_at: "2026-08-24T03:51:08Z"
+    migration_applied: false
+    notes: "Wave3 task6: rubric loop"
+  - from_version: "4.7.4"
+    to_version: "4.7.5"
+    updated_at: "2026-08-24T03:49:52Z"
+    migration_applied: false
+    notes: "Wave3 task5: adaptive N candidates"
+  - from_version: "4.7.3"
+    to_version: "4.7.4"
+    updated_at: "2026-08-24T03:48:38Z"
+    migration_applied: false
+    notes: "Wave3 task4: grounding adapter"
+  - from_version: "4.7.2"
+    to_version: "4.7.3"
+    updated_at: "2026-08-24T03:47:23Z"
+    migration_applied: false
+    notes: "Wave3 task3: prompt prefix"
+  - from_version: "4.7.1"
+    to_version: "4.7.2"
+    updated_at: "2026-08-24T03:46:05Z"
+    migration_applied: false
+    notes: "Wave3 task2: routing + fixture transport"
+  - from_version: "4.7.0"
+    to_version: "4.7.1"
+    updated_at: "2026-08-24T03:40:27Z"
+    migration_applied: false
+    notes: "Wave3 task1: activate content-factory-wave3-generation"
+  - from_version: "4.6.0"
+    to_version: "4.7.0"
+    updated_at: "2026-08-24T03:34:11Z"
+    migration_applied: false
+    notes: "Wave2 task12: factory-kernel close 4.6.0"
+  - from_version: "4.5.11"
+    to_version: "4.6.0"
+    updated_at: "2026-08-24T03:31:13Z"
+    migration_applied: false
+    notes: "Wave2 task12: register factory-kernel close 4.6.0"
+  - from_version: "4.5.10"
+    to_version: "4.5.11"
+    updated_at: "2026-08-24T03:19:53Z"
+    migration_applied: false
+    notes: "Wave2 task11: e2e runner"
+  - from_version: "4.5.9"
+    to_version: "4.5.10"
+    updated_at: "2026-08-24T03:18:35Z"
+    migration_applied: false
+    notes: "Wave2 task10: staging"
+  - from_version: "4.5.8"
+    to_version: "4.5.9"
+    updated_at: "2026-08-24T03:17:18Z"
+    migration_applied: false
+    notes: "Wave2 task9: submission modes"
+  - from_version: "4.5.7"
+    to_version: "4.5.8"
+    updated_at: "2026-08-24T03:15:57Z"
+    migration_applied: false
+    notes: "Wave2 task8: spend 0.08"
+  - from_version: "4.5.6"
+    to_version: "4.5.7"
+    updated_at: "2026-08-24T03:14:22Z"
+    migration_applied: false
+    notes: "Wave2 task7: beat cache"
+  - from_version: "4.5.5"
+    to_version: "4.5.6"
+    updated_at: "2026-08-24T03:12:46Z"
+    migration_applied: false
+    notes: "Wave2 task6: retry policy"
+  - from_version: "4.5.4"
+    to_version: "4.5.5"
+    updated_at: "2026-08-24T03:11:13Z"
+    migration_applied: false
+    notes: "Wave2 task5: idempotency recovery"
+  - from_version: "4.5.3"
+    to_version: "4.5.4"
+    updated_at: "2026-08-24T03:09:37Z"
+    migration_applied: false
+    notes: "Wave2 task4: protocols + domain-blind"
+  - from_version: "4.5.2"
+    to_version: "4.5.3"
+    updated_at: "2026-08-24T03:08:07Z"
+    migration_applied: false
+    notes: "Wave2 task3: sqlite JobQueue"
+  - from_version: "4.5.1"
+    to_version: "4.5.2"
+    updated_at: "2026-08-24T02:58:24Z"
+    migration_applied: false
+    notes: "Wave2 task2: kernel schemas + digests"
+  - from_version: "4.5.0"
+    to_version: "4.5.1"
+    updated_at: "2026-08-24T02:18:36Z"
+    migration_applied: false
+    notes: "Wave2 task1: activate content-factory-wave2-kernel"
+  - from_version: "4.4.10"
+    to_version: "4.5.0"
+    updated_at: "2026-08-22T23:29:01Z"
+    migration_applied: false
+    notes: "Wave1 task11: register content-ir module + exit 4.5.0"
+  - from_version: "4.4.9"
+    to_version: "4.4.10"
+    updated_at: "2026-08-22T23:27:43Z"
+    migration_applied: false
+    notes: "Wave1 task10: round-trip projection proofs"
+  - from_version: "4.4.8"
+    to_version: "4.4.9"
+    updated_at: "2026-08-22T23:26:24Z"
+    migration_applied: false
+    notes: "Wave1 task9: agents entry contracts"
+  - from_version: "4.4.7"
+    to_version: "4.4.8"
+    updated_at: "2026-08-22T23:19:51Z"
+    migration_applied: false
+    notes: "Wave1 task8: rubric + voice specs"
+  - from_version: "4.4.6"
+    to_version: "4.4.7"
+    updated_at: "2026-08-22T23:14:18Z"
+    migration_applied: false
+    notes: "Wave1 task7: variant layer schema"
+  - from_version: "4.4.5"
+    to_version: "4.4.6"
+    updated_at: "2026-08-22T23:13:01Z"
+    migration_applied: false
+    notes: "Wave1 task6: jurisdiction rule-pack + grounding_ref 1.5a"
+  - from_version: "4.4.4"
+    to_version: "4.4.5"
+    updated_at: "2026-08-22T23:08:09Z"
+    migration_applied: false
+    notes: "Wave1 task5: ce.course profile schema"
+  - from_version: "4.4.3"
+    to_version: "4.4.4"
+    updated_at: "2026-08-22T22:59:43Z"
+    migration_applied: false
+    notes: "Wave1 task4: cutrates.skill profile schema"
+  - from_version: "4.4.2"
+    to_version: "4.4.3"
+    updated_at: "2026-08-22T22:30:00Z"
+    migration_applied: false
+    notes: "Scene graph schema wired into ContentIR core (Wave 1 task 3)."
+  - from_version: "4.4.1"
+    to_version: "4.4.2"
+    updated_at: "2026-08-22T22:25:00Z"
+    migration_applied: false
+    notes: "ContentIR core + grounding_ref schemas (Wave 1 task 2)."
+  - from_version: "4.4.0"
+    to_version: "4.4.1"
+    updated_at: "2026-08-22T22:15:00Z"
+    migration_applied: false
+    notes: "Activate content-factory-wave1-contracts; archive Wave 0 plan."
+  - from_version: "4.3.10"
+    to_version: "4.4.0"
+    updated_at: "2026-08-22T21:45:00Z"
+    migration_applied: false
+    notes: "Wave 0 closeout (content-factory-wave0-hub-modules); handoff to content-factory-wave1-contracts."
+  - from_version: "4.3.9"
+    to_version: "4.3.10"
+    updated_at: "2026-08-22T21:20:00Z"
+    migration_applied: false
+    notes: "fleet_ratchet live PR driver + WAVE0_RATCHET_REPORT; Wave 0 task 10."
+  - from_version: "4.3.8"
+    to_version: "4.3.9"
+    updated_at: "2026-08-22T21:40:00Z"
+    migration_applied: false
+    notes: "FLEET_LEDGER + fleet_upgrade PR-mode resumable driver; Wave 0 task 9."
+  - from_version: "4.3.7"
+    to_version: "4.3.8"
+    updated_at: "2026-08-22T21:15:00Z"
+    migration_applied: false
+    notes: "crosswalk implementation + adapters/generic unknown-stack fallback; Wave 0 task 8."
+  - from_version: "4.3.6"
+    to_version: "4.3.7"
+    updated_at: "2026-08-22T20:25:00Z"
+    migration_applied: false
+    notes: "stack_adapter product_stack + governance_runtime enum; dispatch uses governance_runtime only; Wave 0 task 7."
+  - from_version: "4.3.5"
+    to_version: "4.3.6"
+    updated_at: "2026-08-22T20:00:00Z"
+    migration_applied: false
+    notes: "crosswalk verb specified in COMMAND_INTERFACE v1.1.0; stack_adapter schema binding; Wave 0 task 6."
+  - from_version: "4.3.4"
+    to_version: "4.3.5"
+    updated_at: "2026-08-22T04:45:00Z"
+    migration_applied: false
+    notes: "Per-module tags module/<id>/vX.Y.Z; check_version_bump module-only exemption; Wave 0 task 5."
+  - from_version: "4.3.3"
+    to_version: "4.3.4"
+    updated_at: "2026-08-22T04:15:00Z"
+    migration_applied: false
+    notes: "MODULE_REGISTRY.yaml + MODULES.lock placeholders; module_registry_validate.py agreement gate; Wave 0 task 4."
+  - from_version: "4.3.2"
+    to_version: "4.3.3"
+    updated_at: "2026-08-21T14:05:00Z"
+    migration_applied: false
+    notes: "module_manifest + modules_lock schemas; elevated_write_to for 7_schemas; Wave 0 work on feature/content-factory-wave0-hub-modules."
+  - from_version: "4.3.1"
+    to_version: "4.3.2"
+    updated_at: "2026-08-21T13:50:00Z"
+    migration_applied: false
+    notes: "decision_registry_validate --propose writes registry row; DEC-0005 governance_runtime vs product_stack; elevated_write_to for 5_reference_architectures."
+  - from_version: "4.3.0"
+    to_version: "4.3.1"
+    updated_at: "2026-08-21T04:45:00Z"
+    migration_applied: false
+    notes: "Advance-only commit exemption; preserve authored completion reports; state_transition_log on context allowlist."
+  - from_version: "4.2.0"
+    to_version: "4.3.0"
+    updated_at: "2026-08-21T04:30:00Z"
+    migration_applied: false
+    notes: "GOVERNANCE_SURFACE_INCONSISTENCY class: hierarchical write-path drift, elevated_write_to, scripts import roots, validate autofixer stability, plan_swap pointer resets, GATE-4 explicit outputs."
+  - from_version: "4.1.0"
+    to_version: "4.2.0"
+    updated_at: "2026-08-18T03:00:00Z"
+    migration_applied: false
+    notes: "Runtime safety: /audit-runtime-safety + agentic/exec_guard.py (timeout/memory/output/subprocess caps) wired through harness; CURSOR_RULES exec-safety mandate; Python spokes receive exec_guard via agentic/; Node spokes receive the audit command via .cursor/commands/."
+  - from_version: "4.0.0"
+    to_version: "4.1.0"
+    updated_at: "2026-08-12T00:00:00Z"
+    migration_applied: false
+    notes: "Audit command suite: /audit-* Cursor commands + AUDIT_REGISTRY manifest + registry validator; .cursor/commands/ added to propagation allowlists."
+  - from_version: "3.0.0"
+    to_version: "4.0.0"
+    updated_at: "2026-08-01T06:00:00Z"
+    migration_applied: true
+    notes: "Stack-agnostic protocol: contract/adapter split, neutral dispatcher (meta.ps1/meta.sh), Node reference adapter, STACK_COUPLING feedback; default adapter python preserves v3 behavior"
+  - from_version: "1.0.0"
+    to_version: "1.1.0"
+    updated_at: "2024-01-15T00:00:00Z"
+    migration_applied: false
+    notes: "Added feedback collection system, improved authentication handling"
+  - from_version: "1.1.0"
+    to_version: "1.2.0"
+    updated_at: "2024-01-20T00:00:00Z"
+    migration_applied: false
+    notes: "Added legacy project upgrade system with AI-agent friendly workflow"
+  - from_version: "1.2.0"
+    to_version: "1.3.0"
+    updated_at: "2024-12-19T00:00:00Z"
+    migration_applied: false
+    notes: "Fixed pre-versioned migration issues: added init_versioning.py, fixed 'latest' version handling, added CLI detection, improved update_history population"
+  - from_version: "1.3.0"
+    to_version: "1.4.0"
+    updated_at: "2024-12-19T00:00:00Z"
+    migration_applied: false
+    notes: "Implemented hub-and-spoke model: standardized feedback reporting module, automated downstream updates, centralized maintenance architecture"
+  - from_version: "1.4.0"
+    to_version: "1.5.0"
+    updated_at: "2026-01-08T00:00:00Z"
+    migration_applied: false
+    notes: "Added GitHub issue resolution system, development resource cleanup scripts, and automated issue validation/closure"
+  - from_version: "1.5.0"
+    to_version: "1.6.0"
+    updated_at: "2026-01-08T00:00:00Z"
+    migration_applied: false
+    notes: "Installed DSKB governance enforcement: Governance section in AI_CONTEXT.md, governance presence check, intent declaration contracts with schema validation, intent enforcement guardrail"
+  - from_version: "1.6.0"
+    to_version: "1.7.0"
+    updated_at: "2026-01-09T00:00:00Z"
+    migration_applied: false
+    notes: "Auto-advance state with completion gate + transition log: Task completion gate (6 gates), state transition logging (JSONL), auto-advance protocol, completion reports, governed state advancement"
+  - from_version: "1.7.0"
+    to_version: "2.0.0"
+    updated_at: "2026-01-19T00:00:00Z"
+    migration_applied: true
+    notes: "Major upgrade: Real-time learning system, cross-platform hooks, file integrity verification, atomic updates, automatic rollback, enhanced CLI commands, comprehensive documentation"
+  - from_version: "2.0.0"
+    to_version: "2.1.0"
+    updated_at: "2026-07-05T00:00:00Z"
+    migration_applied: true
+    notes: "Agentic coordination upgrade: decision registry, drift vectors, agent role graph, resurrection scan, workspace spine, structured run log, phase gate"
+  - from_version: "2.1.0"
+    to_version: "2.2.0"
+    updated_at: "2026-07-05T00:00:00Z"
+    migration_applied: true
+    notes: "Optional in-project agentic tools: knowledge index, doc lifecycle, janitor, governance drift validator, reference validator — toggle via feature_flags optional_tools or cli.py agentic tools"
+  - from_version: "2.2.0"
+    to_version: "2.2.1"
+    updated_at: "2026-07-17T00:00:00Z"
+    migration_applied: false
+    notes: "Feedback ingestion hardening and governance updates: full-body single-entry feedback issues, idempotent submission tracking, context file task-scope allowlist, database hygiene global standard, and no-verify workflow guidance"
+  - from_version: "2.2.1"
+    to_version: "2.2.2"
+    updated_at: "2026-07-17T08:30:00Z"
+    migration_applied: false
+    notes: "Cross-platform pre-commit hooks: Python implementations replace Bash defaults, staged-file scoping, subprocess timeouts, and tests-and-coverage runs once per commit"
+  - from_version: "2.2.2"
+    to_version: "3.0.0"
+    updated_at: "2026-07-17T09:00:00Z"
+    migration_applied: true
+    notes: "Self-improving agent platform: agent_platform Layer 0-3, capability/evaluator/taxonomy registries, orchestration pipeline, child registry, platform CLI (inspect/plan/doctor/child)"
+
+features:
+  dynamic_layout_adaptation: true
+  guided_initialization: true
+  dynamic_ai_context: true
+  template_versioning: true
+  drift_detection: true
+  feedback_collection: true
+  legacy_upgrade: true
+  hub_and_spoke_model: true
+  standardized_feedback: true
+  governance_enforcement: true
+  intent_declaration_contracts: true
+  auto_advance_state: true
+  task_completion_gate: true
+  state_transition_logging: true
+  # v2.0.0 Features
+  cross_platform_hooks: true
+  environment_detection: true
+  real_time_learning: true
+  issue_knowledge_base: true
+  issue_matching: true
+  fix_application: true
+  file_integrity_verification: true
+  atomic_updates: true
+  automatic_rollback: true
+  enhanced_cli_commands: true
+  migration_dependency_verification: true
+  schema_validation: true
+  enhanced_error_handling: true
+  # v2.1.0 Features
+  agentic_coordination: true
+  decision_registry: true
+  resurrection_scan: true
+  agent_role_graph: true
+  structured_run_log: true
+  workspace_spine_registry: true
+  optional_agentic_tools: true
+  knowledge_index: true
+  doc_lifecycle: true
+  janitor: true
+  governance_drift_validator: true
+  reference_validator: true
+  agent_platform: true
+  capability_registry: true
+  evaluator_registry: true
+  semantic_taxonomy: true
+  child_repository_registry: true
+  platform_orchestration: true
+  runtime_exec_guard: true
+
+# Directories that are part of the template and can be updated
+template_directories:
+  - "0_phase0_bootstrap/"
+  - "1_global_standards/"
+  - "2_framework_templates/"
+  - "3_bootstrap_scripts/"
+  - "5_reference_architectures/"
+  - "7_schemas/"
+  - "8_ci/"
+  - "agentic/"
+  - "agent_platform/"
+  - "adapters/"
+  - "templates/catalog/"
+  - ".cursor/commands/"
+  - "meta.ps1"
+  - "meta.sh"
+
+# Files in template directories that should NOT be overwritten (project customizations)
+protected_files:
+  - "0_phase0_bootstrap/MVP_SPECIFICATION.yaml"
+  - "0_phase0_bootstrap/feature_flags.yml"  # May have project-specific overrides
+  - "5_reference_architectures/CHILD_REPOSITORY_REGISTRY.yaml"  # child-owned on spokes; hub fleet list must not overwrite
+
+# Directories that are project-specific and should never be overwritten
+project_directories:
+  - "4_docs_index/"
+  - "6_ai_runtime_context/"
+  - "frontend/"
+  - "backend/"
+  - "shared/"
+  - "apps/"
+  - "packages/"
+  - "docs/"  # Project-specific documentation (not template docs)

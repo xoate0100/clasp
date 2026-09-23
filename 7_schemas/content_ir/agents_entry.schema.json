@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/agents_entry.schema.json",
+  "title": "Agents-file entry contract (DEC-FAC-0022)",
+  "description": "Two profile-discriminated entry shapes — not one shared optional-heavy file.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "title", "skill_id", "grounding_corpus", "objectives"],
+      "properties": {
+        "profile": { "const": "cutrates.skill" },
+        "title": { "type": "string", "minLength": 1 },
+        "skill_id": { "type": "string", "minLength": 1 },
+        "grounding_corpus": { "type": "string", "minLength": 1 },
+        "objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "locale": { "type": "string", "default": "en-US" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "title",
+        "course_code",
+        "jurisdiction_id",
+        "grounding_corpus",
+        "objectives",
+        "credit_hours_requested"
+      ],
+      "properties": {
+        "profile": { "const": "ce.course" },
+        "title": { "type": "string", "minLength": 1 },
+        "course_code": { "type": "string", "minLength": 1 },
+        "jurisdiction_id": { "type": "string", "minLength": 1 },
+        "grounding_corpus": { "type": "string", "minLength": 1 },
+        "objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "credit_hours_requested": { "type": "number", "minimum": 0 },
+        "locale": { "type": "string", "default": "en-US" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "adapter_id": "python",
+  "schema_version": "1.1.0",
+  "governance_runtime": "python",
+  "product_stack": "python",
+  "display_name": "Python Reference Adapter",
+  "description": "Backward-compatible reference implementation of the meta-framework protocol.",
+  "toolchain": {
+    "runtimes": [
+      {
+        "name": "python",
+        "min_version": "3.10",
+        "version_command": "python --version"
+      }
+    ],
+    "package_manager": "pip",
+    "test_command": "python -m pytest",
+    "lint_command": "python 3_bootstrap_scripts/static_analysis.py",
+    "hook_runner": "pre-commit"
+  },
+  "commands": {
+    "init": { "run": "python 3_bootstrap_scripts/cli.py init" },
+    "generate-context": { "run": "python 3_bootstrap_scripts/cli.py generate-context" },
+    "validate": { "run": "python 3_bootstrap_scripts/cli.py validate" },
+    "check-updates": { "run": "python 3_bootstrap_scripts/cli.py template-status" },
+    "apply-updates": { "run": "python 3_bootstrap_scripts/cli.py update-template" },
+    "submit-feedback": { "run": "python 3_bootstrap_scripts/cli.py submit-feedback" },
+    "health": { "run": "python 3_bootstrap_scripts/cli.py health" },
+    "crosswalk": { "run": "python 3_bootstrap_scripts/crosswalk.py --offline" },
+    "verify-integrity": { "run": "python 3_bootstrap_scripts/cli.py verify-template" },
+    "template-status": { "run": "python 3_bootstrap_scripts/cli.py template-status" },
+    "hook-install": { "run": "python 3_bootstrap_scripts/install_hooks.py" },
+    "factory-run": { "run": "python 3_bootstrap_scripts/factory_run.py run" },
+    "blog-evaluate": { "run": "python 3_bootstrap_scripts/content/blog_evaluate.py" },
+    "status": {
+      "run": "python 3_bootstrap_scripts/fleet_backlog_status.py && python 3_bootstrap_scripts/governance_gap_status.py"
+    }
+  },
+  "sync_paths": [
+    "adapters/python/",
+    "3_bootstrap_scripts/",
+    "agentic/",
+    "agent_platform/"
+  ],
+  "aliases": {
+    "update-template": "apply-updates",
+    "verify-template": "verify-integrity",
+    "onboard": "crosswalk"
+  }
+}

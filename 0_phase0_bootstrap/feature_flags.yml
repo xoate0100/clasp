@@ -1,0 +1,116 @@
+mode:
+  cursor_agent_mode: sandboxed
+  agentic_write_ops: true
+  modify_meta_framework: false
+  human_review_required_for_merge: true
+permissions:
+  write_to:
+  - 3_bootstrap_scripts/
+  - 4_docs_index/
+  - 6_ai_runtime_context/
+  - docs/
+  - scripts/
+  - src/
+  - test/
+  - tests/
+  elevated_write_to:
+  - 0_phase0_bootstrap/
+  - .github/
+  - 5_reference_architectures/
+  - 7_schemas/
+  - adapters/
+  readonly:
+  - 1_global_standards/
+  - 7_schemas/
+  - 8_ci/
+  - 5_reference_architectures/
+components:
+  frontend:
+    language: typescript
+    package_manager: auto
+    coverage_threshold: 100
+    complexity_limit: 12
+    directories:
+    - frontend/
+  backend:
+    language: typescript
+    coverage_threshold: 100
+    complexity_limit: 10
+    directories:
+    - src/
+    - test/
+  shared:
+    language: typescript
+    coverage_threshold: 100
+    complexity_limit: 10
+    directories:
+    - shared/
+gates:
+  block_on_security_critical: true
+  block_on_schema_violation: true
+  block_on_coverage_drop: true
+  warn_on_performance_regression: true
+  warn_on_mutation_drop: true
+thresholds:
+  mutation_kill: 75
+  perf_regression_pct: 10
+  max_duplication_pct: 10
+  max_function_complexity: 10
+  line_length: 100
+ai_guardrails:
+  enforce_task_scope: true
+  allow_context_files_in_any_commit: true
+  forbid_folder_creation_outside_scope: true
+  enforce_tdd_cycle: true
+  enforce_solid_principles: true
+  require_doc_sync: true
+  require_commit_plan_tags: true
+  enforce_intent_declaration: true
+  enforce_agentic_coordination: true
+agentic:
+  enabled: true
+  session_start: 3_bootstrap_scripts/agentic_session.py session-start
+  pre_commit_review: 3_bootstrap_scripts/agentic_session.py pre-commit-review
+  behavioral_daemon:
+    miner_enabled: true
+    remediation_enabled: false
+    auto_fix_enabled: false
+    auto_merge_enabled: false
+    auto_promote_enabled: false
+  optional_tools:
+    knowledge_index:
+      enabled: true
+    doc_lifecycle:
+      enabled: true
+    janitor:
+      enabled: true
+    governance_drift_validator:
+      enabled: true
+    reference_validator:
+      enabled: true
+meta_framework_validations:
+  drift_check:
+    enabled: true
+    sandbox_rules_file: 0_phase0_bootstrap/AI_SANDBOX_RULES.md
+    feature_flags_file: 0_phase0_bootstrap/feature_flags.yml
+    compare_write_paths: true
+    automation_writers:
+    - script: 3_bootstrap_scripts/docs_sync.py
+      writes_to: 4_docs_index/
+meta:
+  schema_version: 1.0.0
+  last_updated: '2026-08-23T00:00:00Z'
+  author: Project Team
+feedback_collection:
+  enabled: true
+  frequency: weekly
+  include_anonymized_logs: true
+  auto_submit: false
+template_updates:
+  check_on_commit: true
+  auto_update: false
+  check_frequency: on_commit
+  warn_only: true
+maturity:
+  level: L2.5
+  description: Single-Agent Sandbox

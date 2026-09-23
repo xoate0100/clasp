@@ -1,0 +1,9 @@
+name: Mutation Tests (Advisory)
+on: [pull_request]
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Run mutation tools appropriate to your stack; report only."
+

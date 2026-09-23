@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/modules_lock.schema.json",
+  "title": "Modules Lock",
+  "description": "Resolved hub module pins (MODULES.lock). Each entry freezes version, tag, integrity, and governance_runtime.",
+  "type": "object",
+  "required": ["schema_version", "modules"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated": {
+      "type": "string",
+      "description": "ISO8601 or date stamp when the lock was last resolved"
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": [
+          "module_id",
+          "version",
+          "resolved_tag",
+          "integrity",
+          "governance_runtime"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "module_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([.-][A-Za-z0-9.-]+)?$"
+          },
+          "resolved_tag": {
+            "type": "string",
+            "description": "Git tag pinning this module (module/<id>/vX.Y.Z)",
+            "pattern": "^module/[a-z][a-z0-9_-]*/v[0-9]+\\.[0-9]+\\.[0-9]+([.-][A-Za-z0-9.-]+)?$"
+          },
+          "integrity": {
+            "type": "string",
+            "description": "Content hash or attestation for the resolved tree",
+            "minLength": 8,
+            "pattern": "^(sha256|sha512)-[A-Za-z0-9+/=_-]+$|^[a-f0-9]{64}$"
+          },
+          "governance_runtime": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          }
+        }
+      }
+    }
+  }
+}

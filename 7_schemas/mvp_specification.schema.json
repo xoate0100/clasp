@@ -1,0 +1,339 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://meta-framework.io/schemas/mvp_spec.schema.json",
+    "title": "L2.5 MVP Specification Schema",
+    "description": "Validation schema for MVP_SPECIFICATION.yaml files used in L2.5 meta-framework projects.",
+    "version": "1.0.0",
+
+    "type": "object",
+    "required": [
+      "Project",
+      "Maturity",
+      "Architecture",
+      "Execution_Mode",
+      "GOALS_AND_PRINCIPLES",
+      "TECH_STACK",
+      "ACTIVE_PLAN_TEMPLATE",
+      "SUMMARY_FOR_INITIALIZER"
+    ],
+
+    "properties": {
+      "Project": { "type": "string", "minLength": 1 },
+      "Maturity": { "type": "string", "enum": ["L2", "L2.5", "L3"] },
+      "Architecture": { "type": "string" },
+      "Repo_Type": { "type": "string", "enum": ["frontend", "backend", "fullstack", "microservice", "monorepo"] },
+      "Execution_Mode": {
+        "type": "string",
+        "enum": ["Human Directed", "Controlled Agentic Execution", "Fully Agentic"]
+      },
+
+      "GOALS_AND_PRINCIPLES": {
+        "type": "object",
+        "required": ["goals", "principles"],
+        "properties": {
+          "goals": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "principles": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+        }
+      },
+
+      "TECH_STACK": {
+        "type": "object",
+        "required": ["frontend"],
+        "properties": {
+          "frontend": {
+            "type": "object",
+            "required": ["framework", "language"],
+            "properties": {
+              "framework": {
+                "type": "string",
+                "enum": ["nextjs", "react", "vue", "svelte", "angular", "remix", "astro", "none"]
+              },
+              "language": { "type": "string" },
+              "styling": { "type": "array", "items": { "type": "string" } },
+              "animations": { "type": "string" },
+              "validation": { "type": "string" }
+            }
+          },
+          "backend": {
+            "type": "object",
+            "properties": {
+              "framework": {
+                "type": "string",
+                "enum": ["fastapi", "flask", "django", "express", "spring", "none"]
+              },
+              "language": { "type": "string" },
+              "orm": { "type": "string" }
+            }
+          },
+          "shared": {
+            "type": "object",
+            "properties": { "language": { "type": "string" } }
+          },
+          "integrations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "optional_libs": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+
+      "MONOREPO_LAYOUT": {
+        "type": "object",
+        "required": ["root"],
+        "properties": {
+          "root": { "type": "object" },
+          "apps": { "type": "object" },
+          "scripts": { "type": "array", "items": { "type": "string" } },
+          "shared": { "type": "object" }
+        }
+      },
+
+      "PROJECT_LAYOUT": {
+        "type": "object",
+        "description": "Flexible layout mapping for projects that do not fit frontend/backend/shared at repo root (e.g., Next.js apps/, packages/, src-only).",
+        "properties": {
+          "adaptation": {
+            "type": "object",
+            "description": "Bootstrap-time layout adaptation controls. Defaults to propose-only (no moves) unless explicitly enabled.",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": ["adopt_existing", "normalize_to_template"],
+                "description": "adopt_existing: keep existing structure, just configure components/write_paths. normalize_to_template: move directories into template canonical roots."
+              },
+              "auto_apply": {
+                "type": "boolean",
+                "description": "If true and mode=normalize_to_template, initializer may apply safe moves automatically."
+              }
+            }
+          },
+          "components": {
+            "type": "object",
+            "description": "Map logical components (frontend/backend/shared/other) to one or more root directories.",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "directories": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "minItems": 1
+                },
+                "language": { "type": "string" },
+                "framework": { "type": "string" }
+              },
+              "required": ["directories"]
+            }
+          },
+          "write_paths": {
+            "type": "array",
+            "description": "Optional explicit write paths (directory prefixes with trailing slash). If omitted, initializer derives from components/directories.",
+            "items": { "type": "string" }
+          }
+        }
+      },
+
+      "ENVIRONMENT_AND_CONFIG": {
+        "type": "object",
+        "properties": {
+          "vercel_env": { "type": "object" },
+          "env_notes": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "ROUTING_MODEL": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["path-based", "domain-based", "hybrid"] },
+          "base_path": { "type": "string" },
+          "data_source": { "type": "string" }
+        }
+      },
+
+      "SCHEMA_DEFINITION": {
+        "type": "object",
+        "properties": {
+          "validation_lib": { "type": "string" },
+          "schema_files": { "type": "array", "items": { "type": "string" } },
+          "modules": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "BRAND_MODULE": {
+        "type": "object",
+        "properties": {
+          "colors": { "type": "object" },
+          "fonts": { "type": "object" },
+          "cta_text": { "type": "string" },
+          "disclaimers": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "ANALYTICS_AND_EVENTS": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string" },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "pixels": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "INTEGRATIONS": {
+        "type": "object",
+        "properties": {
+          "oncehub": { "type": "string" },
+          "activecampaign": { "type": "string" },
+          "optional_future": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "SEO_AND_JSONLD": {
+        "type": "object",
+        "properties": {
+          "meta_fields": { "type": "array", "items": { "type": "string" } },
+          "jsonld": { "type": "array", "items": { "type": "string" } },
+          "sitemap": { "type": "object" }
+        }
+      },
+
+      "AI_UI_GENERATION": {
+        "type": "object",
+        "properties": {
+          "tool": { "type": "string" },
+          "prompt_library": { "type": "string" },
+          "pattern": { "type": "string" }
+        }
+      },
+
+      "AUTOMATION_SCRIPTS": {
+        "type": "object",
+        "patternProperties": {
+          ".*": { "type": "string" }
+        }
+      },
+
+      "INTERACTIVE_PATTERNS": {
+        "type": "object",
+        "additionalProperties": { "type": "object" }
+      },
+
+      "QA_CHECKLIST": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+
+      "DEPLOYMENT": {
+        "type": "object",
+        "properties": {
+          "provider": { "type": "string" },
+          "domain": { "type": "string" },
+          "dns": { "type": "string" },
+          "preview": { "type": "boolean" }
+        }
+      },
+
+      "MIGRATION_PATH": {
+        "type": "object",
+        "properties": {
+          "future_subdomains": { "type": "string" },
+          "automation": { "type": "string" }
+        }
+      },
+
+      "FIRST_RUN_PLAYBOOK": {
+        "type": "object",
+        "properties": {
+          "steps": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "POST_MVP_FEATURES": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+
+      "DELIVERABLES_DAY1": {
+        "type": "object",
+        "properties": {
+          "outputs": { "type": "array", "items": { "type": "string" } },
+          "success_metric": { "type": "string" }
+        }
+      },
+
+      "ACTIVE_PLAN_TEMPLATE": {
+        "type": "object",
+        "required": ["plan_id", "component", "goal", "tasks", "status", "auto_commit"],
+        "properties": {
+          "plan_id": { "type": "string" },
+          "component": { "type": "string", "enum": ["frontend", "backend", "shared"] },
+          "goal": { "type": "string" },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "name"],
+              "properties": {
+                "id": { "type": "number" },
+                "name": { "type": "string" },
+                "outputs": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "status": { "type": "string", "enum": ["active", "paused", "done"] },
+          "auto_commit": { "type": "boolean" },
+          "commit_frequency": {
+            "type": "string",
+            "enum": ["per_task", "per_phase", "checkpoint_based", "manual"],
+            "description": "How often to commit: per_task (after each task), per_phase (after logical groups), checkpoint_based (use commit_checkpoints), manual (no automatic commits)"
+          },
+          "commit_checkpoints": {
+            "type": "object",
+            "description": "Configuration for commit checkpoints that override auto_commit when thresholds are met",
+            "properties": {
+              "after_phases": {
+                "type": "boolean",
+                "description": "Commit after completing each phase (logical task group)"
+              },
+              "after_task_count": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Commit after N tasks complete (e.g., 3-5 tasks)"
+              },
+              "after_file_threshold": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Commit when N files changed since last commit (e.g., 10 files)"
+              },
+              "force_commit_on_checkpoint": {
+                "type": "boolean",
+                "description": "Override auto_commit: false when checkpoint threshold is met"
+              }
+            }
+          }
+        }
+      },
+
+      "FEATURE_FLAGS_REFERENCE": {
+        "type": "object",
+        "properties": {
+          "cursor_agent_mode": { "type": "string" },
+          "agentic_write_ops": { "type": "boolean" },
+          "modify_meta_framework": { "type": "boolean" }
+        }
+      },
+
+      "SUMMARY_FOR_INITIALIZER": {
+        "type": "object",
+        "properties": {
+          "intent": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+    ,
+    "anyOf": [
+      { "required": ["MONOREPO_LAYOUT"] },
+      { "required": ["PROJECT_LAYOUT"] }
+    ]
+  }

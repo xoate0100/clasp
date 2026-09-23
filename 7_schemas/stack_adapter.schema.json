@@ -1,0 +1,197 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/stack_adapter.schema.json",
+  "title": "Stack Adapter Manifest",
+  "description": "Language-neutral profile declaring how a stack satisfies meta-framework lifecycle verbs and hook checks. governance_runtime drives verb dispatch; product_stack is informational only (DEC-0005 / ADR-0005). Runtime commands are opaque strings executed by the neutral dispatcher.",
+  "type": "object",
+  "required": [
+    "adapter_id",
+    "schema_version",
+    "governance_runtime",
+    "toolchain",
+    "commands"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "adapter_id": {
+      "type": "string",
+      "description": "Stable adapter identifier (directory under adapters/)",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "examples": ["python", "node", "go", "generic"]
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Manifest schema version",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "governance_runtime": {
+      "type": "string",
+      "description": "Runtime that implements COMMAND_INTERFACE verbs. The ONLY field verb dispatch may consult for stack selection (never product_stack).",
+      "enum": ["python", "node", "go", "generic"]
+    },
+    "product_stack": {
+      "type": "string",
+      "description": "Informational product language/stack (e.g. php, typescript). Must not drive lifecycle verb dispatch.",
+      "minLength": 1
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Human-readable adapter name"
+    },
+    "description": {
+      "type": "string"
+    },
+    "toolchain": {
+      "type": "object",
+      "description": "Primary toolchain metadata for health checks and docs",
+      "required": ["runtimes", "package_manager", "hook_runner"],
+      "additionalProperties": false,
+      "properties": {
+        "runtimes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "min_version"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Runtime binary name as checked on PATH (e.g. node, python, go)"
+              },
+              "min_version": {
+                "type": "string",
+                "description": "Minimum semver or vendor version string"
+              },
+              "version_command": {
+                "type": "string",
+                "description": "Command that prints version (default: '<name> --version')"
+              }
+            }
+          }
+        },
+        "package_manager": {
+          "type": "string",
+          "description": "Primary package manager",
+          "examples": ["pip", "pnpm", "npm", "yarn", "go", "none"]
+        },
+        "test_command": {
+          "type": "string",
+          "description": "Default test invocation"
+        },
+        "lint_command": {
+          "type": "string"
+        },
+        "build_command": {
+          "type": "string"
+        },
+        "hook_runner": {
+          "type": "string",
+          "description": "Hook runner satisfying HOOK_CONTRACT.md",
+          "examples": ["pre-commit", "lefthook", "husky", "ci-only"]
+        }
+      }
+    },
+    "commands": {
+      "type": "object",
+      "description": "Map of lifecycle verb → native command. Required verbs must be present. Protocol also requires crosswalk (COMMAND_INTERFACE.md); declare the binding once adapters implement it.",
+      "required": [
+        "init",
+        "generate-context",
+        "validate",
+        "check-updates",
+        "apply-updates",
+        "submit-feedback",
+        "health",
+        "crosswalk"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "init": { "$ref": "#/definitions/commandBinding" },
+        "generate-context": { "$ref": "#/definitions/commandBinding" },
+        "validate": { "$ref": "#/definitions/commandBinding" },
+        "check-updates": { "$ref": "#/definitions/commandBinding" },
+        "apply-updates": { "$ref": "#/definitions/commandBinding" },
+        "submit-feedback": { "$ref": "#/definitions/commandBinding" },
+        "health": { "$ref": "#/definitions/commandBinding" },
+        "crosswalk": { "$ref": "#/definitions/commandBinding" },
+        "verify-integrity": { "$ref": "#/definitions/commandBinding" },
+        "template-status": { "$ref": "#/definitions/commandBinding" },
+        "upgrade-legacy": { "$ref": "#/definitions/commandBinding" },
+        "hook-install": { "$ref": "#/definitions/commandBinding" },
+        "factory-run": { "$ref": "#/definitions/commandBinding" },
+        "blog-evaluate": {
+          "$ref": "#/definitions/commandBinding",
+          "description": "Deterministic blog.article evaluator (EV.content.blog_article / BP5)"
+        },
+        "status": {
+          "$ref": "#/definitions/commandBinding",
+          "description": "Fleet/hub status including open fleet backlog count (Wave E)"
+        }
+      }
+    },
+    "hooks": {
+      "type": "object",
+      "description": "Optional explicit check-id → command map. If omitted, validate delegates to hook_runner config files.",
+      "additionalProperties": {
+        "$ref": "#/definitions/commandBinding"
+      }
+    },
+    "sync_paths": {
+      "type": "array",
+      "description": "Extra paths under the hub that belong to this adapter and may be synced on apply-updates",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "forbidden_sync_globs": {
+      "type": "array",
+      "description": "Globs this adapter must never receive from the hub",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "aliases": {
+      "type": "object",
+      "description": "Legacy CLI subcommand → verb mapping for backward compatibility",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "definitions": {
+    "commandBinding": {
+      "type": "object",
+      "required": ["run"],
+      "additionalProperties": false,
+      "properties": {
+        "run": {
+          "type": "string",
+          "description": "Shell-invocable command relative to repo root. Cross-platform: adapters SHOULD provide .sh/.ps1 or a portable binary.",
+          "minLength": 1
+        },
+        "cwd": {
+          "type": "string",
+          "description": "Working directory relative to repo root",
+          "default": "."
+        },
+        "env": {
+          "type": "object",
+          "description": "Extra environment variables (values may use ${ENV} placeholders; never inline secrets)",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

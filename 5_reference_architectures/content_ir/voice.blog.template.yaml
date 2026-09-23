@@ -1,0 +1,15 @@
+# Voice spec template — blog.article (business-neutral)
+# Businesses copy this shape into their spoke override (voice_ref) and fill values.
+# Do not put business-specific copy in the hub.
+profile: blog.article
+voice_id: REPLACE_WITH_BUSINESS_VOICE_ID
+tone: REPLACE — e.g. clear, direct, respectful of reader time
+pace: REPLACE — e.g. measured
+reading_level_target: REPLACE — e.g. grade_8
+forbidden:
+  - REPLACE — phrases or postures this voice must not use
+preferred:
+  - REPLACE — phrases or postures this voice prefers
+person:
+  default: second
+  first_person_requires_author_ref: true

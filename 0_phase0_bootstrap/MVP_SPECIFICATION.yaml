@@ -1,0 +1,76 @@
+Project: clasp
+Maturity: L2.5
+Architecture: typescript-cli
+Repo_Type: backend
+Execution_Mode: Controlled Agentic Execution
+GOALS_AND_PRINCIPLES:
+  goals:
+  - Keep the existing clasp CLI (src/, test/) and adopt it in place
+  - Inherit the project_initializer meta-framework as a child spoke
+  - Enable AI-assisted development without moving product code
+  principles:
+  - Test-driven development
+  - Preserve upstream clasp behavior
+  - Documentation as code
+TECH_STACK:
+  frontend:
+    framework: none
+    language: typescript
+  backend:
+    framework: none
+    language: typescript
+  integrations:
+  - google-apps-script
+  - googleapis
+PROJECT_LAYOUT:
+  adaptation:
+    mode: adopt_existing
+    auto_apply: false
+  components:
+    backend:
+      directories:
+      - src
+      - test
+      language: typescript
+      framework: nodejs
+  write_paths:
+  - src/
+  - test/
+  - docs/
+  - scripts/
+  - tests/
+  - 3_bootstrap_scripts/
+  - 4_docs_index/
+  - 6_ai_runtime_context/
+ENVIRONMENT_AND_CONFIG:
+  env_notes:
+  - .envrc is existing project configuration; do not overwrite it
+ACTIVE_PLAN_TEMPLATE:
+  plan_id: clasp-child-init
+  component: backend
+  goal: Initialize clasp as a project_initializer child without relocating the CLI
+  tasks:
+  - id: 1
+    name: Confirm node adapter and inherited template version
+    outputs:
+    - 0_phase0_bootstrap/stack_adapter.yaml
+    - 0_phase0_bootstrap/META_FRAMEWORK_VERSION.yaml
+  - id: 2
+    name: Preserve clasp source, tests, and existing CI
+    outputs:
+    - src/index.ts
+    - test/
+    - .github/
+  status: active
+  auto_commit: false
+  commit_frequency: manual
+FEATURE_FLAGS_REFERENCE:
+  cursor_agent_mode: sandboxed
+  agentic_write_ops: true
+  modify_meta_framework: false
+SUMMARY_FOR_INITIALIZER:
+  intent:
+  - Adopt the existing TypeScript CLI in place
+  - Select the node stack adapter from TECH_STACK
+  - Inherit template 4.20.1 from project_initializer
+  - Do not normalize src/ into frontend/ or backend/

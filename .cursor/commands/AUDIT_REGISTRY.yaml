@@ -1,0 +1,235 @@
+# =============================================================================
+# AUDIT_REGISTRY.yaml  —  source of truth for the /audit-* command suite
+# Lives in project_initializer; propagates to spokes via templates/catalog.
+# Both humans (Cursor /command) and agents (Claude Code, orchestrator, CI) read
+# this to discover, gate, and dispatch commands. See _skeleton.md §7.
+# Status: active | drafting | planned
+# =============================================================================
+
+version: 0.1.0
+owner: andy
+home: xoate0100/project_initializer
+skeleton: .cursor/commands/_skeleton.md
+index: .cursor/commands/README.md
+
+conventions:
+  command_dir: .cursor/commands
+  output_root: docs/audit/<domain>/
+  finding_id: F-###
+  modes: [discovery, fix]          # default discovery (non-destructive)
+  default_mode: discovery
+  emits: [INVENTORY.md, COVERAGE_MATRIX.md, FINDINGS.md, REMEDIATION_PROMPT.md]
+  stacks: [next, node, python, any] # next = Next16/React19/TS/Tailwind4/shadcn/Supabase-SSR/pnpm
+  do_not_touch:                     # initializer-owned; commands never modify these
+    - meta.ps1
+    - meta.sh
+    - agentic/
+    - 0_phase0_bootstrap/ .. 8_ci/  # numbered spine dirs
+
+agentic:
+  invocable: true
+  discovery_surface: this_file      # agents enumerate `commands[]` below
+  dispatch: read command_file -> follow _skeleton.md phases -> write output_dir
+  orchestrator: audit-all
+  gate: NEEDS-ANDY/GATES.yaml        # irreversible/cross-repo actions block here
+  # Future seam (not yet wired; do not modify meta-framework to add it):
+  #   meta.ps1 audit <command> [--fix]  ->  adapter runner enumerates this registry
+  claude_code_mirror: .claude/commands/   # planned: generated copy for Claude Code
+
+clusters: [security, correctness, frontend, product, platform, code-health, reliability, meta]
+
+commands:
+
+  - id: audit-security-nist
+    command_file: .cursor/commands/audit-security-nist.md
+    title: NIST-aligned application security review
+    cluster: security
+    status: active
+    priority: P0
+    applies_to: [next, node, python, any]
+    standards: [CSF 2.0, SP 800-53, SP 800-115, SP 800-63B, SP 800-218, SP 800-30, CVSS]
+    output_dir: docs/audit/security/
+    depends_on: []
+    related: [audit-data, audit-dependencies, audit-observability, audit-integrations, audit-infra]
+
+  - id: audit-completeness
+    command_file: .cursor/commands/audit-completeness.md
+    title: Incomplete / disconnected implementation sweep
+    cluster: correctness
+    status: active
+    priority: P1
+    applies_to: [next, node, any]
+    output_dir: docs/audit/completeness/
+    depends_on: []
+    related: [audit-journey, audit-observability, audit-docs]
+
+  - id: audit-uiux
+    command_file: .cursor/commands/audit-uiux.md
+    title: Design-system conformance + UI/UX audit
+    cluster: frontend
+    status: active
+    priority: P1
+    applies_to: [next]
+    output_dir: docs/audit/uiux/
+    depends_on: []
+    related: [audit-media, audit-optimization]
+
+  - id: audit-media
+    command_file: .cursor/commands/audit-media.md
+    title: Envato media-slot pipeline audit
+    cluster: frontend
+    status: active
+    priority: P1
+    applies_to: [next]
+    output_dir: docs/audit/media/
+    depends_on: []
+    related: [audit-uiux, audit-optimization]
+
+  - id: audit-optimization
+    command_file: .cursor/commands/audit-optimization.md
+    title: Runtime, memory & image optimization (Core Web Vitals)
+    cluster: frontend
+    status: active
+    priority: P2
+    applies_to: [next, node]
+    output_dir: docs/audit/optimization/
+    depends_on: []
+    related: [audit-media, audit-infra]
+
+  - id: audit-journey
+    command_file: .cursor/commands/audit-journey.md
+    title: User journey / flow coherence
+    cluster: product
+    status: active
+    priority: P2
+    applies_to: [next, any]
+    output_dir: docs/audit/journey/
+    depends_on: []
+    related: [audit-conversion, audit-completeness]
+
+  - id: audit-conversion
+    command_file: .cursor/commands/audit-conversion.md
+    title: Funnel + advertising copy / content audit
+    cluster: product
+    status: active
+    priority: P2
+    applies_to: [next, any]
+    output_dir: docs/audit/conversion/
+    depends_on: []
+    related: [audit-journey, audit-seo]
+
+  - id: audit-seo
+    command_file: .cursor/commands/audit-seo.md
+    title: SEO + AI-discoverability audit
+    cluster: product
+    status: active
+    priority: P2
+    applies_to: [next, any]
+    output_dir: docs/audit/seo/
+    depends_on: []
+    related: [audit-conversion]
+
+  - id: audit-integrations
+    command_file: .cursor/commands/audit-integrations.md
+    title: Third-party integration audit
+    cluster: platform
+    status: active
+    priority: P1
+    applies_to: [next, node, any]
+    output_dir: docs/audit/integrations/
+    depends_on: []
+    related: [audit-security-nist, audit-observability]
+
+  - id: audit-data
+    command_file: .cursor/commands/audit-data.md
+    title: Database & storage audit
+    cluster: platform
+    status: active
+    priority: P1
+    applies_to: [next, node]
+    output_dir: docs/audit/data/
+    depends_on: []
+    related: [audit-security-nist, audit-infra]
+
+  - id: audit-infra
+    command_file: .cursor/commands/audit-infra.md
+    title: Infrastructure & deployment audit
+    cluster: platform
+    status: active
+    priority: P2
+    applies_to: [next, node, any]
+    output_dir: docs/audit/infra/
+    depends_on: []
+    related: [audit-security-nist, audit-data]
+
+  - id: audit-dependencies
+    command_file: .cursor/commands/audit-dependencies.md
+    title: Dependencies & stack currency
+    cluster: code-health
+    status: active
+    priority: P2
+    applies_to: [next, node, python, any]
+    output_dir: docs/audit/dependencies/
+    depends_on: []
+    related: [audit-security-nist]
+
+  - id: audit-observability
+    command_file: .cursor/commands/audit-observability.md
+    title: Logging, error handling & tracing audit
+    cluster: code-health
+    status: active
+    priority: P2
+    applies_to: [next, node, any]
+    mergeable_with: audit-docs
+    output_dir: docs/audit/observability/
+    depends_on: []
+    related: [audit-integrations, audit-completeness]
+
+  - id: audit-docs
+    command_file: .cursor/commands/audit-docs.md
+    title: Code & project documentation coverage
+    cluster: code-health
+    status: active
+    priority: P3
+    applies_to: [next, node, python, any]
+    mergeable_with: audit-observability
+    output_dir: docs/audit/docs/
+    depends_on: []
+    related: [audit-completeness]
+
+  - id: audit-runtime-safety
+    command_file: .cursor/commands/audit-runtime-safety.md
+    title: Runtime & execution safety preflight
+    cluster: reliability
+    status: active
+    priority: P1
+    applies_to: [next, node, python, any]
+    output_dir: docs/audit/runtime-safety/
+    depends_on: []
+    related: [audit-observability, audit-optimization, audit-completeness]
+
+  - id: audit-all
+    command_file: .cursor/commands/audit-all.md
+    title: Orchestrator — run applicable subset for this repo
+    cluster: meta
+    status: active
+    priority: P2
+    applies_to: [any]
+    output_dir: docs/audit/
+    depends_on:
+      - audit-security-nist
+      - audit-completeness
+      - audit-uiux
+      - audit-media
+      - audit-optimization
+      - audit-journey
+      - audit-conversion
+      - audit-seo
+      - audit-integrations
+      - audit-data
+      - audit-infra
+      - audit-dependencies
+      - audit-observability
+      - audit-docs
+      - audit-runtime-safety
+    related: []

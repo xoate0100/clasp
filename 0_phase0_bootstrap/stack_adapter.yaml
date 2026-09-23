@@ -1,0 +1,4 @@
+# Active stack adapter (v4). Migrated children default to python.
+# Selected at init from TECH_STACK → node (DEC-0003-ADAPTER-MODEL / NA-01)
+adapter: node
+manifest: adapters/node/stack_adapter.yaml

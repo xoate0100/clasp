@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intent Declaration Contract",
+  "description": "Schema for AI-assisted change intent declarations. Required before committing code changes.",
+  "type": "object",
+  "required": [
+    "intent_id",
+    "timestamp",
+    "actor",
+    "plan_id",
+    "component",
+    "task_id",
+    "intended_changes",
+    "expected_outputs",
+    "permissions_checked",
+    "state_files_read"
+  ],
+  "properties": {
+    "intent_id": {
+      "type": "string",
+      "description": "Unique identifier for this intent declaration",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO8601 timestamp when intent was declared",
+      "format": "date-time"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Entity declaring intent (e.g., 'cursor_ai', 'human')",
+      "enum": ["cursor_ai", "human", "automation"]
+    },
+    "plan_id": {
+      "type": "string",
+      "description": "Plan ID from ACTIVE_PLAN.yaml"
+    },
+    "component": {
+      "type": "string",
+      "description": "Component name (e.g., 'frontend', 'backend', 'shared')"
+    },
+    "task_id": {
+      "description": "Task ID from ACTIVE_TASK_POINTER.yaml",
+      "oneOf": [
+        {"type": "integer"},
+        {"type": "string"}
+      ]
+    },
+    "intended_changes": {
+      "type": "array",
+      "description": "List of intended file changes",
+      "items": {
+        "type": "object",
+        "required": ["path", "change_type"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File or directory path relative to project root"
+          },
+          "change_type": {
+            "type": "string",
+            "enum": ["create", "modify", "delete", "rename"],
+            "description": "Type of change intended"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional notes about this change"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "expected_outputs": {
+      "type": "array",
+      "description": "Expected outputs from current task (from ACTIVE_PLAN.yaml task.outputs)",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "permissions_checked": {
+      "type": "boolean",
+      "description": "Confirmation that permissions were checked against feature_flags.yml"
+    },
+    "state_files_read": {
+      "type": "array",
+      "description": "List of state files that were read (must include ACTIVE_TASK_POINTER.yaml and ACTIVE_PLAN.yaml)",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about this intent declaration"
+    }
+  }
+}
+

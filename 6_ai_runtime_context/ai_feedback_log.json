@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "timestamp": "2026-09-23T04:25:52.308056Z",
+      "category": "GUARDRAIL_VIOLATION",
+      "issue": "## Guardrail Violation\n\n**Guardrail**: enforce_tdd_cycle\n**Component**: shared\n**Files Affected**: src/commands/run-function.ts, src/core/files.ts, src/core/functions.ts, test/core/files.ts, test/core/functions.ts\n**Context**: Guardrail check failed during pre-commit\n\n**Details**:\nGuardrail 'enforce_tdd_cycle' failed validation\n\n**Requires Human Intervention**: Yes\n",
+      "context": "Guardrail check failed during pre-commit",
+      "requires_human_intervention": true,
+      "attempt_count": 1,
+      "files": [
+        "src/commands/run-function.ts",
+        "src/core/files.ts",
+        "src/core/functions.ts",
+        "test/core/files.ts",
+        "test/core/functions.ts"
+      ]
+    }
+  ]
+}

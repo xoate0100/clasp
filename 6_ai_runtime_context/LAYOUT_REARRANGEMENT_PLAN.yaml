@@ -1,0 +1,54 @@
+version: '1.0'
+detected:
+  markers:
+    has_frontend_dir: false
+    has_backend_dir: false
+    has_shared_dir: false
+    has_apps_dir: false
+    has_packages_dir: false
+    has_src_dir: true
+    has_nextjs_markers: false
+    has_node_root: true
+    has_python_root: false
+    has_dotnet_root: false
+decision:
+  mode: adopt_existing
+  auto_apply: false
+  will_apply: false
+suggestions:
+  project_layout_components: {}
+operations: []
+safety:
+  requires_git_clean: true
+  protected_top_level:
+  - .github
+  - 0_phase0_bootstrap
+  - 1_global_standards
+  - 2_framework_templates
+  - 3_bootstrap_scripts
+  - 4_docs_index
+  - 5_reference_architectures
+  - 6_ai_runtime_context
+  - 7_schemas
+  - 8_ci
+  no_move_dirs:
+  - .git
+  - .github
+  - .next
+  - .venv
+  - 0_phase0_bootstrap
+  - 1_global_standards
+  - 2_framework_templates
+  - 3_bootstrap_scripts
+  - 4_docs_index
+  - 5_reference_architectures
+  - 6_ai_runtime_context
+  - 7_schemas
+  - 8_ci
+  - __pycache__
+  - build
+  - dist
+  - node_modules
+  - out
+  - venv
+results: []

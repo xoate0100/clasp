@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/factory_kernel/batch_result.schema.json",
+  "title": "BatchResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["batch_id", "job_ids", "status"],
+  "properties": {
+    "batch_id": {"type": "string", "minLength": 1},
+    "job_ids": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "status": {"type": "string", "minLength": 1}
+  }
+}

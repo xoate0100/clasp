@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DecisionRegistry",
+  "type": "object",
+  "required": ["version", "decisions"],
+  "properties": {
+    "version": {"type": "integer", "minimum": 1},
+    "updated": {"type": "string"},
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "decision_id",
+          "status",
+          "decision_basis",
+          "forbidden_resurrection_in",
+          "resurrection_trigger_keywords"
+        ],
+        "properties": {
+          "decision_id": {
+            "type": "string",
+            "pattern": "^DEC-[0-9]{4}-[A-Z0-9-]+$"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["proposed", "accepted", "deprecated", "superseded"]
+          },
+          "decision_basis": {"type": "string", "minLength": 1},
+          "supersedes": {"type": ["string", "null"]},
+          "forbidden_resurrection_in": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 1
+          },
+          "resurrection_trigger_keywords": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 1
+          },
+          "reopen_requires": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

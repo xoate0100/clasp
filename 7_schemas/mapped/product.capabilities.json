@@ -1,0 +1,319 @@
+{
+  "schema": "capability-descriptor-mapped/v1",
+  "source": "Wave A confirmed product set (DECISION_CONFIRMATIONS_POST_WAVE0.md)",
+  "category": "product",
+  "mapped_at": "2026-08-27",
+  "deferred_to_wave_b": ["content.publish", "mcp.connect", "google.workspace.auth"],
+  "capabilities": [
+    {
+      "id": "content.generate",
+      "version": "1.0.0",
+      "name": "Content Generate",
+      "description": "LLM → structured artifact (course/skill/blog/proposal) with validation before publish",
+      "category": "product",
+      "maturity": "production",
+      "risk_level": "medium",
+      "approval_policy": "advisory",
+      "contract": {
+        "spec": "docs/factory/FACTORY_RUN_CONTRACT.md § generate stage + 7_schemas/content_ir/*",
+        "schemas": [
+          "7_schemas/content_ir/content_ir.core.schema.json",
+          "7_schemas/factory_kernel/generation_request.schema.json"
+        ],
+        "inputs": {
+          "generation_request": { "type": "object" },
+          "submission_mode": { "type": "string" }
+        },
+        "outputs": {
+          "content_ir": { "type": "object" }
+        }
+      },
+      "conformance_suite": {
+        "suite_id": "content.generate.conformance",
+        "version": "1.0.0",
+        "description": "Points at existing generation / ContentIR tests as declarative cases",
+        "cases": [
+          {
+            "id": "gen-valid-ir-shape",
+            "input": {
+              "fixture": "fixtures/content_ir/core.valid.json",
+              "related_tests": ["tests/test_content_ir_core_schema.py", "tests/test_factory_generate_e2e.py"]
+            },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.objectives", "op": "exists" }]
+            },
+            "tags": ["content_ir"]
+          },
+          {
+            "id": "gen-reject-missing-objectives",
+            "input": {
+              "fixture": "fixtures/content_ir/core.invalid.missing_objectives.json"
+            },
+            "expect": { "outcome": "reject", "error_code": "MISSING_OBJECTIVES" },
+            "tags": ["negative"]
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "backend/factory_generate/",
+        "repository": "xoate0100/project_initializer",
+        "notes": "Reference per REPO_CONSOLIDATION_MAP; Node generators (surewealth) must pass same suite"
+      },
+      "agent_manifest": {
+        "summary": "Generate structured content IR from a generation request; do not publish.",
+        "discovery": {
+          "kind": "agents",
+          "entrypoints": [
+            "fixtures/content_ir/agents.ce.course.valid.yaml",
+            "fixtures/content_ir/agents.cutrates.skill.valid.yaml"
+          ]
+        },
+        "inputs": {
+          "generation_request": { "type": "object", "required": true }
+        },
+        "outputs": {
+          "content_ir": { "type": "object" }
+        },
+        "may_override": [
+          {
+            "path": "reference_implementation",
+            "reason": "Python factory vs Node surewealth generator — inherit-and-override"
+          },
+          {
+            "path": "contract.inputs.voice",
+            "reason": "Voice/persona packs are project-specific"
+          }
+        ],
+        "must_pass": [
+          {
+            "requirement": "ContentIR contract validation",
+            "conformance_case_ids": ["gen-valid-ir-shape", "gen-reject-missing-objectives"]
+          }
+        ],
+        "must_not_change": ["id", "category", "conformance_suite.suite_id"]
+      },
+      "dependencies": [],
+      "evaluators": ["EV.schema.capability_registry"],
+      "provenance": {
+        "reference_repos": [
+          "xoate0100/project_initializer",
+          "xoate0100/ai_blog_post_generator",
+          "xoate0100/google_classroom_generator",
+          "xoate0100/surewealth-education-platform"
+        ],
+        "cluster_count": 9
+      }
+    },
+    {
+      "id": "knowledge.mine",
+      "version": "1.0.0",
+      "name": "Knowledge Mine",
+      "description": "Ingest a corpus → extract structured knowledge → tag → make queryable. One capability, multiple source adapters.",
+      "category": "product",
+      "maturity": "candidate",
+      "risk_level": "medium",
+      "approval_policy": "advisory",
+      "contract": {
+        "spec": "Multi-source knowledge mining: pluggable source adapters share one extract/tag/query contract",
+        "schemas": [],
+        "inputs": {
+          "source_adapter_id": { "type": "string" },
+          "corpus_ref": { "type": "string" }
+        },
+        "outputs": {
+          "knowledge_index": { "type": "object" },
+          "tags": { "type": "array" }
+        },
+        "source_adapters": [
+          {
+            "id": "src.cursor_history",
+            "role": "cursor-history",
+            "reference_repo": "xoate0100/cursor-recursion",
+            "status": "implemented",
+            "notes": "Most mature — carries evals + behavioral registry"
+          },
+          {
+            "id": "src.chat_exports",
+            "role": "openai-chat-exports",
+            "reference_repo": "xoate0100/second-brain-automation",
+            "status": "implemented",
+            "notes": "Zettelkasten/Obsidian tagged output"
+          },
+          {
+            "id": "src.spoke_feedback",
+            "role": "spoke-feedback-daemon",
+            "reference_repo": "planned:wave-f-daemon",
+            "status": "planned",
+            "notes": "Wave F daemon — fourth instance if built as adapter, not a new pipeline"
+          }
+        ]
+      },
+      "conformance_suite": {
+        "suite_id": "knowledge.mine.conformance",
+        "version": "1.0.0",
+        "cases": [
+          {
+            "id": "mine-requires-adapter",
+            "input": { "source_adapter_id": null },
+            "expect": { "outcome": "reject", "error_code": "ADAPTER_REQUIRED" }
+          },
+          {
+            "id": "mine-cursor-adapter-index",
+            "input": {
+              "source_adapter_id": "src.cursor_history",
+              "corpus_ref": "fixture://cursor_history_sample"
+            },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.knowledge_index", "op": "exists" }]
+            },
+            "tags": ["adapter:cursor"]
+          },
+          {
+            "id": "mine-chat-adapter-index",
+            "input": {
+              "source_adapter_id": "src.chat_exports",
+              "corpus_ref": "fixture://chat_export_sample"
+            },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.knowledge_index", "op": "exists" }]
+            },
+            "tags": ["adapter:second-brain"]
+          },
+          {
+            "id": "mine-planned-adapter-stub",
+            "input": {
+              "source_adapter_id": "src.spoke_feedback",
+              "corpus_ref": "fixture://feedback_sample"
+            },
+            "expect": { "outcome": "partial", "error_code": "ADAPTER_PLANNED" },
+            "tags": ["adapter:daemon"]
+          }
+        ]
+      },
+      "reference_implementation": {
+        "language": "python",
+        "path": "capabilities/registry.yaml mining pipeline",
+        "repository": "xoate0100/cursor-recursion",
+        "notes": "Reference = most mature adapter; others must pass the same suite"
+      },
+      "agent_manifest": {
+        "summary": "Mine knowledge from a declared source adapter into a queryable index. Do not invent a fourth pipeline — add an adapter.",
+        "inputs": {
+          "source_adapter_id": { "type": "string", "required": true },
+          "corpus_ref": { "type": "string", "required": true }
+        },
+        "outputs": {
+          "knowledge_index": { "type": "object" }
+        },
+        "may_override": [
+          {
+            "path": "contract.source_adapters",
+            "reason": "New corpora become new adapters, not new capabilities"
+          },
+          {
+            "path": "reference_implementation",
+            "reason": "Any adapter may be the runtime body for a given project"
+          }
+        ],
+        "must_pass": [
+          {
+            "requirement": "Adapter id required; implemented adapters emit an index",
+            "conformance_case_ids": [
+              "mine-requires-adapter",
+              "mine-cursor-adapter-index",
+              "mine-chat-adapter-index"
+            ]
+          }
+        ],
+        "must_not_change": [
+          "id",
+          "category",
+          "contract.source_adapters[].id"
+        ]
+      },
+      "dependencies": [],
+      "evaluators": [],
+      "provenance": {
+        "stress_test": "multi-source",
+        "cluster_count": 5,
+        "wave_f_daemon": "planned adapter src.spoke_feedback"
+      }
+    },
+    {
+      "id": "workspace.feedback",
+      "version": "0.1.0",
+      "name": "Workspace Feedback",
+      "description": "Behavioral input pipe for the L3 daemon — collect structured feedback from spokes. No dedicated repo yet.",
+      "category": "behavioral",
+      "maturity": "idea",
+      "risk_level": "low",
+      "approval_policy": "none",
+      "contract": {
+        "spec": "Contract-only: spokes emit structured feedback events consumable by a future daemon; no reference impl in-repo yet",
+        "inputs": {
+          "feedback_event": {
+            "type": "object",
+            "required": ["spoke_id", "kind", "payload"]
+          }
+        },
+        "outputs": {
+          "accepted": { "type": "boolean" }
+        }
+      },
+      "conformance_suite": {
+        "suite_id": "workspace.feedback.conformance",
+        "version": "0.1.0",
+        "cases": [
+          {
+            "id": "feedback-accept-valid",
+            "input": {
+              "feedback_event": {
+                "spoke_id": "xoate0100/example",
+                "kind": "guardrail_failure",
+                "payload": { "hook": "example" }
+              }
+            },
+            "expect": {
+              "outcome": "pass",
+              "asserts": [{ "path": "$.accepted", "op": "eq", "value": true }]
+            }
+          },
+          {
+            "id": "feedback-reject-missing-spoke",
+            "input": {
+              "feedback_event": { "kind": "x", "payload": {} }
+            },
+            "expect": { "outcome": "reject", "error_code": "SPOKE_ID_REQUIRED" }
+          }
+        ]
+      },
+      "agent_manifest": {
+        "summary": "Contract-only feedback pipe. Implementers may supply a body later; schema must hold without reference_implementation.",
+        "may_override": [
+          {
+            "path": "reference_implementation",
+            "reason": "Omitted today; may be added when daemon lands"
+          }
+        ],
+        "must_pass": [
+          {
+            "requirement": "Valid events accept; missing spoke_id rejects",
+            "conformance_case_ids": ["feedback-accept-valid", "feedback-reject-missing-spoke"]
+          }
+        ],
+        "must_not_change": ["id", "contract.spec"]
+      },
+      "dependencies": [],
+      "evaluators": [],
+      "provenance": {
+        "contract_only": true,
+        "reference_implementation_omitted": true,
+        "note": "Tests optional reference_implementation path"
+      }
+    }
+  ]
+}

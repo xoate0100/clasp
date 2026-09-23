@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {"type": "number"},
+          "name": {"type": "string"},
+          "outputs": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}
+

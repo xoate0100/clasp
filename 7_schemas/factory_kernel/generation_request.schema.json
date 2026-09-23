@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/factory_kernel/generation_request.schema.json",
+  "title": "GenerationRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "units"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unit_id", "payload"],
+        "properties": {
+          "unit_id": {"type": "string", "minLength": 1},
+          "payload": {"type": "object"}
+        }
+      }
+    },
+    "budget_usd": {"type": "number", "minimum": 0},
+    "metadata": {"type": "object"}
+  }
+}

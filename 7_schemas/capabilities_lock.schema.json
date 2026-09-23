@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/capabilities_lock.schema.json",
+  "title": "CAPABILITIES.lock",
+  "description": "Spoke pin file for git-tag-vendored capabilities (DEC-CP-0013). Mirrors MODULES.lock pattern.",
+  "type": "object",
+  "required": ["schema_version", "capabilities"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "registry": { "type": "string", "description": "GitHub repo owner/name" },
+    "updated": { "type": "string" },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability_id", "git_tag", "integrity"],
+        "additionalProperties": false,
+        "properties": {
+          "capability_id": { "type": "string" },
+          "git_tag": { "type": "string" },
+          "integrity": { "type": "string", "pattern": "^sha256-" },
+          "vendored_path": { "type": "string" }
+        }
+      }
+    }
+  }
+}

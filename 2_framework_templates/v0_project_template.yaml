@@ -1,0 +1,176 @@
+# v0.dev Project Template Configuration
+# This template is optimized for projects created with v0.dev and deployed on Vercel
+
+Project: ${PROJECT_NAME}
+Maturity: L2.5
+Architecture: Single Vercel App with App Router
+Repo_Type: frontend
+Execution_Mode: Controlled Agentic Execution
+
+GOALS_AND_PRINCIPLES:
+  goals:
+    - Rapid prototyping and deployment with v0.dev
+    - Serverless-first architecture on Vercel
+    - AI-powered UI generation and iteration
+    - Production-ready deployments with custom domains
+  principles:
+    - v0-first development workflow
+    - TypeScript for type safety
+    - Component-based architecture
+    - Serverless functions for backend needs
+
+TECH_STACK:
+  frontend:
+    framework: Next.js
+    version: 14
+    language: TypeScript
+    styling: [TailwindCSS, shadcn/ui]
+    ui_generation: v0.dev
+  deployment:
+    provider: Vercel
+    serverless: true
+    edge_functions: true
+  integrations:
+    - Vercel Analytics
+    - Vercel Speed Insights
+
+MONOREPO_LAYOUT:
+  root:
+    files: [.env.local, package.json, next.config.js, tailwind.config.js, tsconfig.json]
+  app:
+    directories:
+      - app/
+      - components/
+      - lib/
+      - public/
+    files:
+      - app/layout.tsx
+      - app/page.tsx
+      - app/globals.css
+
+PROJECT_LAYOUT:
+  adaptation:
+    mode: adopt_existing
+    auto_apply: false
+  components:
+    frontend:
+      directories:
+        - app/
+        - components/
+        - lib/
+      framework: Next.js
+      language: TypeScript
+
+ENVIRONMENT_AND_CONFIG:
+  vercel_env:
+    - VERCEL_ENV
+    - NEXT_PUBLIC_*
+  env_notes:
+    - Use Vercel environment variables for configuration
+    - NEXT_PUBLIC_* variables are exposed to the browser
+
+ROUTING_MODEL:
+  type: app-router
+  base_path: /
+  data_source: server-components
+
+SCHEMA_DEFINITION:
+  validation_lib: zod
+  schema_files: []
+  modules: []
+
+BRAND_MODULE:
+  colors: {}
+  fonts: {}
+  cta_text: ''
+  disclaimers: []
+
+ANALYTICS_AND_EVENTS:
+  provider: Vercel Analytics
+  events: []
+  pixels: []
+
+INTEGRATIONS:
+  vercel: true
+  v0: true
+  optional_future: []
+
+SEO_AND_JSONLD:
+  meta_fields: []
+  jsonld: []
+  sitemap: {}
+
+AI_UI_GENERATION:
+  tool: v0.dev
+  prompt_library: v0_prompts.md
+  pattern: component-based
+
+AUTOMATION_SCRIPTS:
+  vercel_deploy: vercel --prod
+  vercel_preview: vercel
+  dev: npm run dev
+  build: npm run build
+
+INTERACTIVE_PATTERNS: {}
+
+QA_CHECKLIST:
+  - Check Vercel deployment status
+  - Verify custom domain configuration
+  - Test serverless functions
+  - Validate environment variables
+
+DEPLOYMENT:
+  provider: Vercel
+  domain: ${CUSTOM_DOMAIN}
+  dns: automatic
+  preview: true
+  production_url: ${VERCEL_URL}
+
+MIGRATION_PATH:
+  from_v0: true
+  v0_project_name: ${V0_PROJECT_NAME}
+  migration_notes: "Migrated from v0.dev to project_initializer structure"
+
+FIRST_RUN_PLAYBOOK:
+  steps:
+    - "Run: python3 3_bootstrap_scripts/cli.py init --v0-migration"
+    - "Configure Vercel environment variables"
+    - "Link to Vercel project: vercel link"
+    - "Deploy: vercel --prod"
+
+POST_MVP_FEATURES:
+  - Add project_initializer standards
+  - Integrate guardrails
+  - Add pre-commit hooks
+  - Set up feedback collection
+
+DELIVERABLES_DAY1:
+  - Working v0 project structure
+  - Vercel deployment configured
+  - Environment variables set
+  - Custom domain connected (if applicable)
+
+ACTIVE_PLAN_TEMPLATE:
+  tasks:
+    - name: "Initialize project_initializer structure"
+      description: "Add project_initializer standards to v0 project"
+      status: pending
+    - name: "Configure Vercel deployment"
+      description: "Set up Vercel project and environment variables"
+      status: pending
+    - name: "Add guardrails"
+      description: "Integrate project_initializer guardrails"
+      status: pending
+
+FEATURE_FLAGS_REFERENCE:
+  v0_integration: true
+  vercel_deployment: true
+  serverless_functions: true
+
+SUMMARY_FOR_INITIALIZER:
+  project_type: v0_vercel
+  source: v0.dev
+  deployment: Vercel
+  framework: Next.js
+  language: TypeScript
+

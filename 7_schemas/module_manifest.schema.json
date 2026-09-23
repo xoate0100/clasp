@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/module_manifest.schema.json",
+  "title": "Hub Module Manifest",
+  "description": "Versioned, inheritable hub module declaration. governance_runtime drives lifecycle verbs; product_stack is informational only (DEC-0005).",
+  "type": "object",
+  "required": [
+    "module_id",
+    "version",
+    "governance_runtime",
+    "provides",
+    "requires",
+    "protected_paths"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "module_id": {
+      "type": "string",
+      "description": "Stable module identifier",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "description": "Semver module version",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([.-][A-Za-z0-9.-]+)?$"
+    },
+    "governance_runtime": {
+      "type": "string",
+      "description": "Adapter/runtime that implements lifecycle verbs for this module",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "examples": ["python", "node"]
+    },
+    "product_stack": {
+      "type": "string",
+      "description": "Informational product language/stack; must not drive lifecycle verbs"
+    },
+    "provides": {
+      "type": "array",
+      "description": "Capabilities or paths this module supplies",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "requires": {
+      "type": "array",
+      "description": "Module IDs or capability labels this module depends on",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "protected_paths": {
+      "type": "array",
+      "description": "Repo-relative paths the module owns and template sync must not clobber",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

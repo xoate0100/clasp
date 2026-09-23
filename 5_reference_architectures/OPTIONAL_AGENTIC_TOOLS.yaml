@@ -1,0 +1,59 @@
+# Optional in-project agentic tools — toggle via feature_flags.yml or `cli.py agentic tools`.
+# Defaults are enabled in the template; disable per project when not needed.
+version: 1
+updated: "2026-07-05"
+
+tools:
+  - id: knowledge_index
+    description: >
+      Local BM25 knowledge index from KNOWLEDGE_SOURCES.yaml for agent RAG retrieval
+      without external API calls.
+    scripts:
+      - 3_bootstrap_scripts/knowledge_index_build.py
+      - 3_bootstrap_scripts/knowledge_query.py
+      - 3_bootstrap_scripts/knowledge_sources_validate.py
+    modules:
+      - agentic/knowledge/
+
+  - id: doc_lifecycle
+    description: >
+      Living PROJECT_STATUS.md, documentation index sync, archive/deprecate workflow,
+      and link validation via DOC_MANIFEST.yaml.
+    scripts:
+      - 3_bootstrap_scripts/docs_archive.py
+    modules:
+      - agentic/docs_lifecycle.py
+      - agentic/doc_governance.py
+
+  - id: janitor
+    description: >
+      Session-start maintenance — refresh stale AI_CONTEXT, rebuild knowledge index,
+      trim run log, sync human docs.
+    scripts:
+      - 3_bootstrap_scripts/agentic_janitor.py
+    modules:
+      - agentic/janitor.py
+      - agentic/context_fingerprint.py
+
+  - id: governance_drift_validator
+    description: >
+      Cross-check feature_flags permissions vs AI_SANDBOX_RULES forbidden paths.
+    scripts:
+      - 3_bootstrap_scripts/governance_drift_validate.py
+
+  - id: reference_validator
+    description: >
+      Unresolved Python imports and missing repo path literals in changed files.
+    scripts:
+      - 3_bootstrap_scripts/reference_validate.py
+
+profiles:
+  full:
+    description: Enable all optional tools (recommended default for new projects)
+    enable_all: true
+  minimal:
+    description: Core agentic coordination only; disable optional maintenance validators
+    disable:
+      - knowledge_index
+      - doc_lifecycle
+      - janitor

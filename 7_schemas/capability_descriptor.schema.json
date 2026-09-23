@@ -1,0 +1,177 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/capability_descriptor.schema.json",
+  "title": "Unified Capability Descriptor",
+  "description": "Language-neutral capability descriptor unifying operational, behavioral, and product registries (Capability Platform Wave A). Conformance suite is the compiler (blueprint §1.1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "version",
+    "name",
+    "category",
+    "maturity",
+    "risk_level",
+    "contract",
+    "conformance_suite",
+    "agent_manifest"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable capability id (e.g. content.generate, CAP.repo.scan, CAP-RULE-001)"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["operational", "behavioral", "product"]
+    },
+    "maturity": {
+      "type": "string",
+      "enum": [
+        "idea",
+        "hypothesis",
+        "under_evaluation",
+        "candidate",
+        "preview",
+        "installed",
+        "production",
+        "retired"
+      ],
+      "description": "Harvested from EDE IConstraint lifecycle + behavioral status + operational maturity"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "approval_policy": {
+      "type": "string",
+      "enum": ["none", "advisory", "human_required", "locked"],
+      "default": "none",
+      "description": "Maps EDE ConstraintEnforcementLevel (ADVISORY→LOCKED) and operational approval_policy"
+    },
+    "contract": {
+      "type": "object",
+      "required": ["spec"],
+      "additionalProperties": false,
+      "properties": {
+        "spec": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable contract summary or path to markdown/JSON Schema contract"
+        },
+        "schemas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "inputs": { "type": "object" },
+        "outputs": { "type": "object" },
+        "source_adapters": {
+          "type": "array",
+          "description": "Multi-source capabilities declare pluggable adapters here (knowledge.mine stress test)",
+          "items": {
+            "type": "object",
+            "required": ["id", "role"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "role": { "type": "string" },
+              "reference_repo": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["implemented", "planned", "stub"]
+              },
+              "notes": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "conformance_suite": {
+      "$ref": "https://github.com/xoate0100/project_initializer/schemas/capability_conformance_suite.schema.json"
+    },
+    "reference_implementation": {
+      "type": "object",
+      "description": "Optional primary provider pointer (DEC-CP-0012). Use providers[] when multiple.",
+      "required": ["language", "path"],
+      "additionalProperties": false,
+      "properties": {
+        "language": { "type": "string" },
+        "path": { "type": "string" },
+        "repository": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "providers": {
+      "type": "array",
+      "description": "Per-provider registrations (Wave C). Each satisfies the same conformance floor independently.",
+      "items": {
+        "type": "object",
+        "required": ["id", "repo", "path", "language", "conformance_status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "repo": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "minLength": 1 },
+          "language": { "type": "string", "minLength": 1 },
+          "tag": { "type": "string" },
+          "conformance_status": {
+            "type": "string",
+            "enum": ["pass", "fail", "pending", "blocked"]
+          },
+          "conformance_evidence": { "type": "string" },
+          "exceeds_floor": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "agent_manifest": {
+      "$ref": "https://github.com/xoate0100/project_initializer/schemas/capability_agent_manifest.schema.json"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "evaluators": {
+      "type": "array",
+      "description": "Evaluator ids and/or scored eval records (behavioral baseline/enhanced map here)",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "suite": { "type": "string" },
+              "baseline_score": { "type": ["number", "null"] },
+              "enhanced_score": { "type": ["number", "null"] },
+              "last_validated": { "type": ["string", "null"] },
+              "evidence_strength": {
+                "type": "string",
+                "enum": ["heuristic_only", "family_hypothesis", "implemented"]
+              }
+            }
+          }
+        ]
+      },
+      "default": []
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Non-normative mapping notes so original registry meaning is recoverable",
+      "additionalProperties": true
+    }
+  }
+}

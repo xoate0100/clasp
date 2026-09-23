@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "required": ["plan_id","component","goal","tasks","status","auto_commit"],
+  "properties": {
+    "plan_id": {"type": "string"},
+    "component": {"type": "string", "enum": ["frontend","backend","shared"]},
+    "goal": {"type": "string"},
+    "tasks": {
+      "type": "array",
+      "items": {"type": "object", "required": ["id","name"]}
+    },
+    "status": {"type": "string", "enum": ["active","paused","done"]},
+    "auto_commit": {"type": "boolean"}
+  }
+}
+

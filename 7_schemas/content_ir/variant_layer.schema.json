@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/variant_layer.schema.json",
+  "title": "Variant layer (DEC-FAC-0008)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["base_ir_ref", "jurisdiction_id", "operations"],
+  "properties": {
+    "base_ir_ref": { "type": "string", "minLength": 1 },
+    "jurisdiction_id": { "type": "string", "minLength": 1 },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["op"],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "citation_substitute",
+              "beat_insert",
+              "beat_suppress",
+              "numeric_parameterize",
+              "item_tag"
+            ]
+          },
+          "target": { "type": "string" },
+          "value": {},
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

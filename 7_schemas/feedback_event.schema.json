@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/feedback_event.schema.json",
+  "title": "Feedback Event",
+  "description": "Language-neutral JSON wire format for ai_feedback_log.json entries and hub ingestion. Any stack adapter may emit conforming events; Python standardized_feedback.py is one emitter, not the contract.",
+  "type": "object",
+  "required": [
+    "event_id",
+    "schema_version",
+    "timestamp",
+    "category",
+    "title",
+    "body",
+    "source"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique event id (UUID or ulid)",
+      "minLength": 8
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Feedback event schema version"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 creation time"
+    },
+    "category": {
+      "type": "string",
+      "description": "Feedback taxonomy category",
+      "enum": [
+        "GUARDRAIL_VIOLATION",
+        "ARCHITECTURE_VIOLATION",
+        "TEMPLATE_DRIFT",
+        "UPDATE_ISSUE",
+        "PERFORMANCE_ISSUE",
+        "SCHEMA_MISMATCH",
+        "DOCUMENTATION_GAP",
+        "OPERATIONAL_ERROR",
+        "STACK_COUPLING",
+        "PORTABILITY",
+        "AI_ANOMALY",
+        "PATTERN_DETECTED"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "body": {
+      "type": "string",
+      "description": "Human-readable details (markdown allowed)"
+    },
+    "component": {
+      "type": "string",
+      "description": "Affected component (frontend, backend, shared, meta-framework, …)"
+    },
+    "files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Related paths"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "medium"
+    },
+    "requires_human_intervention": {
+      "type": "boolean",
+      "default": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["adapter_id", "emitter"],
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "type": "string",
+          "description": "Stack adapter that emitted the event"
+        },
+        "emitter": {
+          "type": "string",
+          "description": "Emitter implementation id (e.g. standardized_feedback.py, feedback.mjs)"
+        },
+        "repository_id": {
+          "type": "string"
+        },
+        "template_version": {
+          "type": "string"
+        },
+        "git_branch": {
+          "type": "string"
+        }
+      }
+    },
+    "stack_coupling": {
+      "type": "object",
+      "description": "Required when category is STACK_COUPLING or PORTABILITY",
+      "additionalProperties": false,
+      "properties": {
+        "assumed_runtime": {
+          "type": "string",
+          "description": "Runtime the protocol incorrectly required (e.g. python, bash)"
+        },
+        "affected_os": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["windows", "macos", "linux", "wsl", "any"]
+          }
+        },
+        "lifecycle_verb": {
+          "type": "string",
+          "description": "Neutral verb impacted, if any"
+        },
+        "workaround": {
+          "type": "string"
+        }
+      }
+    },
+    "labels": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "remote_issue_url": {
+      "type": "string",
+      "description": "URL if submitted to hub issue tracker"
+    },
+    "context": {
+      "type": "object",
+      "description": "Free-form structured context",
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "enum": ["STACK_COUPLING", "PORTABILITY"]
+          }
+        },
+        "required": ["category"]
+      },
+      "then": {
+        "required": ["stack_coupling"]
+      }
+    }
+  ]
+}

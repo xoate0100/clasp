@@ -1,0 +1,9 @@
+name: Security Baseline
+on: [pull_request]
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Generate SBOM & vulnerability report (advisory by default)."
+

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/xoate0100/project_initializer/schemas/content_ir/projections/skill.projection.schema.json",
+  "title": "Projection target — skill.schema.json subset",
+  "description": "Minimal CutRatesLMS skill projection fields required for round-trip proof.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["skill_id", "title", "objectives", "stages", "content_hash"],
+  "properties": {
+    "skill_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "objectives": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "content_hash": { "type": "string", "minLength": 1 }
+  }
+}

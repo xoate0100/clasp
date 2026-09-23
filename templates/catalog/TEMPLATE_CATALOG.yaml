@@ -1,0 +1,51 @@
+version: "1.0.0"
+updated: "2026-08-11"
+
+templates:
+  - template_id: base.meta_framework
+    version: "3.0.0"
+    description: Core numbered directories, bootstrap scripts, and governance
+    ownership_mode: initializer_owned
+    generated_paths:
+      - 0_phase0_bootstrap/
+      - 1_global_standards/
+      - 3_bootstrap_scripts/
+      - 5_reference_architectures/
+      - 7_schemas/
+      - agentic/
+      - agent_platform/
+    merge_strategy: semantic_merge
+    migration_strategy: versioned_migration_scripts
+    validation_commands:
+      - python 3_bootstrap_scripts/platform_cli.py validate
+      - python 3_bootstrap_scripts/agentic_coordinate_validate.py --skip-scan
+
+  - template_id: agents.coordination
+    version: "2.1.0"
+    description: Agent registry, decision registry, drift vectors, run log
+    ownership_mode: initializer_owned
+    generated_paths:
+      - 5_reference_architectures/AGENT_REGISTRY.yaml
+      - 5_reference_architectures/DECISION_REGISTRY.yaml
+      - agentic/
+    merge_strategy: semantic_merge
+
+  - template_id: runtime.context
+    version: "1.0.0"
+    description: AI runtime context and working state
+    ownership_mode: generated_extensible
+    generated_paths:
+      - 6_ai_runtime_context/
+    merge_strategy: append_only
+
+  - template_id: commands.audit_suite
+    version: "0.2.0"
+    description: Reusable /audit-* Cursor command suite + agent-discovery registry (security, UI/UX, media, journey, funnel, platform, code-health, runtime-safety)
+    ownership_mode: initializer_owned
+    generated_paths:
+      - .cursor/commands/
+    merge_strategy: semantic_merge
+    migration_strategy: versioned_migration_scripts
+    validation_commands:
+      - node --test .cursor/commands/validate_registry.test.mjs
+      - node .cursor/commands/validate_registry.mjs

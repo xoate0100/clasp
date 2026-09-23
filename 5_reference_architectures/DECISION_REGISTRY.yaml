@@ -1,0 +1,138 @@
+# Machine-checkable ADR registry — source of truth for settled and open decisions.
+# Customize rows for your project. Edits require decision_registry_validate.py --propose.
+version: 1
+updated: '2026-09-21'
+decisions:
+- decision_id: DEC-0001-REPO-MODEL
+  status: accepted
+  decision_basis: 'Monorepo layout (frontend/backend/shared) for MVP and early scale.
+    Document your repo-model rationale in docs/architecture/ and reference it here.
+
+    '
+  supersedes: null
+  forbidden_resurrection_in:
+  - any PR
+  - any agent session
+  resurrection_trigger_keywords:
+  - split into separate repos
+  - polyrepo
+  - separate frontend repo
+  - separate backend repo
+  reopen_requires: 'Documented split criteria in your repo-model decision being demonstrably
+    true — not anticipated future scale.
+
+    '
+- decision_id: DEC-0002-STACK-SELECTION
+  status: superseded
+  decision_basis: 'Fulfilled by the v4 stack-adapter model: the hub is multi-adapter;
+    each child selects one adapter (python|node|…). See DEC-0003-ADAPTER-MODEL.
+
+    '
+  supersedes: null
+  forbidden_resurrection_in:
+  - any scaffolding that forces a single language runtime for all children
+  resurrection_trigger_keywords:
+  - python required for all children
+  - one stack only forever
+  reopen_requires: 'A deliberate update via decision_proposer with human approval
+    — never inferred from an unrelated planning conversation.
+
+    '
+- decision_id: DEC-0003-ADAPTER-MODEL
+  status: accepted
+  decision_basis: 'Language-neutral protocol with per-stack adapters. Python is the
+    reference adapter and the default for migrated v3 children. New children select
+    adapter from TECH_STACK at init (JS/TS → node, else python). v4.0 ships python
+    + node only; generic CI-only adapter deferred to v4.1+. Major version 4.0.0.
+
+    '
+  supersedes: DEC-0002-STACK-SELECTION
+  forbidden_resurrection_in:
+  - any PR that makes Python mandatory for non-python adapters
+  - template updates that push adapters/python onto node children
+  resurrection_trigger_keywords:
+  - require python for node children
+  - ship all bootstrap scripts to every stack
+  - delete python adapter
+  reopen_requires: 'Documented ADR amendment plus major-version migration — never
+    silent edits.
+
+    '
+- decision_id: DEC-0004-HOOK-RUNNER
+  status: accepted
+  decision_basis: 'Neutral preferred hook runner is lefthook (cross-platform binary,
+    no Python). Python adapter continues to use pre-commit. Node adapter uses lefthook.
+    husky is allowed only as a node-adapter option, not the neutral default.
+
+    '
+  supersedes: null
+  forbidden_resurrection_in:
+  - any change that makes Python pre-commit the only allowed runner in the protocol
+  resurrection_trigger_keywords:
+  - pre-commit only forever
+  - require husky for all stacks
+  reopen_requires: 'ADR update with adapter impact analysis and conformance matrix
+    update.
+
+    '
+- decision_id: DEC-0005-GOVERNANCE-RUNTIME-SPLIT
+  status: accepted
+  decision_basis: 'Product stack is informational; governance_runtime drives lifecycle
+    verbs. Adapter/runtime selection must not infer product language from the governance
+    toolchain (e.g. CutRatesLMS is PHP product / python governance). No PHP adapter
+    is required for PHP product spokes that already use adapter: python.
+
+    '
+  supersedes: null
+  forbidden_resurrection_in:
+  - any fleet ratchet that sets product_stack from adapter or governance_runtime
+  - any PR that adds a PHP adapter solely because product_stack is php
+  - any agent session that equates TECH_STACK languages with governance_runtime
+  resurrection_trigger_keywords:
+  - infer stack from adapter
+  - php adapter required
+  - governance runtime equals product stack
+  - require php adapter for CutRatesLMS
+  reopen_requires: 'Documented ADR amendment with a spoke that cannot run governance
+    verbs under an existing adapter and evidence that product_stack must drive lifecycle
+    — never inferred from a planning conversation.
+
+    '
+- decision_id: DEC-0018-PUBLISH-CHANNEL-MODEL
+  status: accepted
+  decision_basis: 'content.publish is one contract; channels are providers; channel
+    formatting lives in projections (SW-BLOG-003 / DEC-CP-0018). Resolves DEC-CP-0017
+    interim. Authoritative write-up: docs/factory/DEC_CP_0018_PUBLISH_CHANNEL_MODEL.md.
+
+    '
+  supersedes: null
+  forbidden_resurrection_in:
+  - any PR that forks content.publish per channel
+  - any IR that embeds channel-specific HTML as the publish contract
+  resurrection_trigger_keywords:
+  - channel-specific publish contract
+  - wordpress publish fork
+  - lms publish contract separate
+  reopen_requires: 'Documented ADR amendment with provider impact analysis — never
+    inferred from a spoke convenience.
+
+    '
+- decision_id: DEC-0019-DECISION-DIGEST
+  status: accepted
+  decision_basis: 'One decision.digest capability gates live publish (and related
+    pending decisions); human claim-by-claim review is an extension (SW-BLOG-004/005
+    / DEC-CP-0019). Authoritative write-up: docs/factory/DEC_CP_0019_DECISION_DIGEST.md.
+
+    '
+  supersedes: null
+  forbidden_resurrection_in:
+  - any PR that invents a fourth human-gate digest for live publish
+  - any agent path that publishes live without digest approval
+  resurrection_trigger_keywords:
+  - live publish without human gate
+  - separate publish digest per channel
+  - auto live publish agent
+  reopen_requires: 'Documented ADR amendment plus provider design for digest transport
+    — never silent.
+
+    '

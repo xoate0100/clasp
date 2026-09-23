@@ -1,0 +1,23 @@
+# Rubric v1 — six scoring dimensions (DEC-FAC-0010)
+rubric_id: content-ir-rubric-v1
+version: "1.0.0"
+dimensions:
+  - id: d1_objectives
+    name: Objectives coverage
+    weight: 0.2
+  - id: d2_grounding
+    name: Grounding fidelity
+    weight: 0.2
+  - id: d3_pedagogy
+    name: Pedagogical structure
+    weight: 0.15
+  - id: d4_assessment
+    name: Assessment alignment
+    weight: 0.15
+  - id: d5_clarity
+    name: Clarity and reading level
+    weight: 0.15
+  - id: d6_voice
+    name: Voice conformance
+    weight: 0.15
+    voice_spec_ref: 5_reference_architectures/content_ir/voice.{profile}.yaml

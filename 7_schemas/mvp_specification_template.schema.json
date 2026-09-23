@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meta-framework.io/schemas/mvp_specification_template.schema.json",
+  "title": "L2.5 MVP Specification Template Schema",
+  "description": "Simplified validation schema for MVP_SPECIFICATION.yaml template files. This is a minimal template schema - projects can expand to full schema.",
+  "version": "1.0.0",
+
+  "type": "object",
+  "required": [
+    "project_name",
+    "project_description",
+    "tech_stack",
+    "MONOREPO_LAYOUT",
+    "ACTIVE_PLAN_TEMPLATE"
+  ],
+
+  "properties": {
+    "project_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_description": {
+      "type": "string"
+    },
+    "tech_stack": {
+      "type": "object",
+      "required": ["frontend", "backend", "shared"],
+      "properties": {
+        "frontend": {
+          "type": "object",
+          "required": ["framework", "language"],
+          "properties": {
+            "framework": {
+              "type": "string",
+              "enum": ["react", "vue", "angular", "svelte", "nextjs", "remix", "astro", "none"]
+            },
+            "language": {
+              "type": "string"
+            },
+            "package_manager": {
+              "type": "string",
+              "enum": ["npm", "yarn", "pnpm"]
+            }
+          }
+        },
+        "backend": {
+          "type": "object",
+          "required": ["framework", "language"],
+          "properties": {
+            "framework": {
+              "type": "string",
+              "enum": ["fastapi", "flask", "django", "express", "spring", "none"]
+            },
+            "language": {
+              "type": "string"
+            },
+            "package_manager": {
+              "type": "string",
+              "enum": ["pip", "poetry", "npm"]
+            }
+          }
+        },
+        "shared": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "MONOREPO_LAYOUT": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "ACTIVE_PLAN_TEMPLATE": {
+      "type": "object",
+      "required": ["plan_id", "component", "goal", "tasks", "status", "auto_commit"],
+      "properties": {
+        "plan_id": {"type": "string"},
+        "component": {
+          "type": "string",
+          "enum": ["frontend", "backend", "shared"]
+        },
+        "goal": {"type": "string"},
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "name"],
+            "properties": {
+              "id": {"type": "number"},
+              "name": {"type": "string"},
+              "outputs": {
+                "type": "array",
+                "items": {"type": "string"}
+              }
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "paused", "done"]
+        },
+        "auto_commit": {"type": "boolean"}
+      }
+    },
+    "initial_config": {
+      "type": "object",
+      "properties": {
+        "git_remote": {"type": ["string", "null"]},
+        "ci_enabled": {"type": "boolean"},
+        "pre_commit_enabled": {"type": "boolean"}
+      }
+    }
+  }
+}
+

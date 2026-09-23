@@ -1,0 +1,108 @@
+# Agent role graph — typed handoffs for feature delivery against governed constraints.
+# Tools map to 3_bootstrap_scripts/ and agentic/ modules callable by the harness.
+version: 1
+updated: "2026-07-05"
+
+write_policy:
+  allowed_write_globs:
+    - "backend/**"
+    - "frontend/**"
+    - "shared/**"
+    - "tests/**"
+    - "agentic/**"
+    - "docs/**"
+  forbidden_write_globs:
+    - "5_reference_architectures/DECISION_REGISTRY.yaml"
+    - "0_phase0_bootstrap/MVP_SPECIFICATION.yaml"
+  rebuild_only_via:
+    - "3_bootstrap_scripts/decision_registry_validate.py --propose"
+
+cost_guardrails:
+  max_review_loops: 3
+  live_calls_env_gate: META_AGENTIC_LIVE_ENABLED
+  per_agent:
+    spec_reader:
+      max_turns: 5
+    implementer:
+      max_turns: 20
+    validator:
+      max_turns: 10
+    reviewer:
+      max_turns: 8
+
+tools:
+  load_mvp_phase:
+    script: 3_bootstrap_scripts/phase_gate.py
+    args: ["--status"]
+  load_decision_registry:
+    module: agentic.registry
+    fn: load_decision_registry
+  read_layer_rules:
+    path: 5_reference_architectures/LAYER_RULES.yaml
+  read_decision_registry:
+    path: 5_reference_architectures/DECISION_REGISTRY.yaml
+  architecture_check:
+    script: 3_bootstrap_scripts/architecture_check.py
+  layer_rules_check:
+    script: 3_bootstrap_scripts/architecture_check.py
+  run_tests:
+    script: 3_bootstrap_scripts/tests_coverage.sh
+  schema_validate:
+    script: 3_bootstrap_scripts/decision_registry_validate.py
+  resurrection_scan:
+    script: 3_bootstrap_scripts/resurrection_scan.py
+  drift_vector_check:
+    script: 3_bootstrap_scripts/drift_vector_check.py
+  phase_gate_check:
+    script: 3_bootstrap_scripts/phase_gate.py
+  decision_registry_validate:
+    script: 3_bootstrap_scripts/decision_registry_validate.py
+  knowledge_query:
+    script: 3_bootstrap_scripts/knowledge_query.py
+  knowledge_index_build:
+    script: 3_bootstrap_scripts/knowledge_index_build.py
+
+agents:
+  - id: spec_reader
+    role: "Load active MVP phase, open decisions, and current task context"
+    output_model: PostureSnapshot
+    tools: [load_mvp_phase, load_decision_registry, read_layer_rules, knowledge_query]
+    handoffs: [implementer]
+
+  - id: implementer
+    role: "Write code/tests within allowed paths only; never touches locked governance files"
+    output_model: ChangeProposalSet
+    tools: [read_layer_rules, read_decision_registry]
+    write_fragments: true
+    handoffs: [validator]
+
+  - id: validator
+    role: "Run layer/architecture checks, tests, schema validation"
+    output_model: ValidatorResultSet
+    tools: [architecture_check, layer_rules_check, run_tests, schema_validate]
+    handoffs: [reviewer, implementer]
+
+  - id: reviewer
+    role: "Drift-vector + resurrection scan; checks scope against phase gate"
+    output_model: ReviewReport
+    tools: [resurrection_scan, drift_vector_check, phase_gate_check]
+    handoffs: [implementer, decision_proposer, done]
+
+  - id: decision_proposer
+    role: "ONLY role allowed to draft a DECISION_REGISTRY.yaml row; requires human approval to merge"
+    output_model: DecisionProposal
+    tools: [decision_registry_validate]
+    handoffs: [human_gate]
+
+graph:
+  entry_gate: 3_bootstrap_scripts/phase_gate.py
+  start: spec_reader
+  edges:
+    - {from: spec_reader, to: implementer}
+    - {from: implementer, to: validator}
+    - {from: validator, to: implementer, when: fail}
+    - {from: validator, to: reviewer, when: ok}
+    - {from: reviewer, to: implementer, when: findings}
+    - {from: reviewer, to: decision_proposer, when: needs_decision}
+    - {from: reviewer, to: done, when: clean}
+  max_review_loops: 3

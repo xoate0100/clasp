@@ -1,0 +1,23 @@
+components:
+  frontend:
+    may_import: [shared]
+    forbid_import: [backend]
+  backend:
+    may_import: [shared]
+    forbid_import: [frontend]
+  shared:
+    may_import: []
+    forbid_import: [frontend, backend]
+
+layers:
+  - name: api
+    may_import: [domain]
+  - name: domain
+    may_import: [infra]
+  - name: infra
+    may_import: []
+
+rules:
+  forbid_db_calls_from: [api, domain]
+  require_di_for: [api, domain, infra]
+
